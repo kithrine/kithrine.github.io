@@ -26,7 +26,7 @@
   <title>Todo Javascript DaisyUI</title>
 </head>
 
-<body data-theme="coffee" class="min-h-screen">
+<body data-theme="coffee" class="min-h-screen bg-autumn">
   <div class="navbar bg-base-100 shadow-sm">
     <div class="flex-1">
       <a class="btn btn-ghost text-xl">Daisy To Do</a>
@@ -70,12 +70,12 @@
       <legend class="fieldset-legend">Add a new task:</legend>
       <div class="flex gap-x-4">
         <input id="addTaskText" type="text" class="input input-info" placeholder="Type here" />
-        <button onclick="addTask()" id="addTaskButton" class="btn btn-dash btn-info">Add Task</button>
+        <button onclick="addTask()" id="addTaskButton" class="btn btn-dash btn-info" disabled>Add Task</button>
         <button class="btn btn-soft btn-warning">Cancel</button>
       </div>
     </fieldset>
 
-    <ul id="listContainer" class="list bg-base-100 rounded-box shadow-md">
+    <ul id="listContainer" class="list bg-base-200 rounded-box shadow-md mt-8">
   
       <li class="p-4 pb-2 text-sm tracking-wide uppercase">Tasks</li>
       
