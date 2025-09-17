@@ -69,7 +69,16 @@
     <fieldset class="fieldset">
       <legend class="fieldset-legend">Add a new task:</legend>
       <div class="flex gap-x-4">
-        <input id="addTaskText" type="text" class="input input-info" placeholder="Type here" />
+        <input id="addTaskText" type="text" class="input bg-neutral" placeholder="Type here" />
+        <label class="select bg-neutral">
+          <span class="label">Priority Level</span>
+          <select id="addTaskPriority" class="hover:text-neutral-content">
+            <option value="Low" class="bg-info text-neutral hover:text-neutral-content" selected>Low</option>
+            <option value="Normal" class="bg-success text-neutral hover:text-neutral-content">Normal</option>
+            <option value="High" class="bg-warning text-neutral hover:text-neutral-content">High</option>
+            <option value="Urgent" class="bg-error text-neutral hover:text-neutral-content">Urgent</option>
+          </select>
+        </label>
         <button onclick="handleAddTask()" id="addTaskButton" class="btn btn-dash btn-info" disabled>Add Task</button>
         <button class="btn btn-soft btn-warning">Cancel</button>
       </div>
