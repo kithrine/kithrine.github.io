@@ -2,6 +2,7 @@
 const addTaskButton = document.getElementById("addTaskButton")
 const addTaskText = document.getElementById("addTaskText")
 const listContainer = document.getElementById("listContainer")
+const taskStatusBadge = document.getElementById("task-status-badge")
 
 
 //* INITIALIZE TASK DATA AND GRAB ANY CURRENT TASKS SAVED IN LOCAL STORAGE
@@ -18,14 +19,16 @@ const deleteIcon = `<svg xmlns="http://www.w3.org/2000/svg" height="20" width="2
 
 //* BUILD TODO LIST
 const buildTodoList = (task) => {
+  console.log("task.status", task.status)
+ 
   return `
       <li id="${task.id}" class="list-row">
         <div id="task-id" class="text-4xl font-thin opacity-30 tabular-nums">${task.id}</div>
         <div class="list-col-grow">
           <div>
-            <div class="badge badge-warning">${task.status}</div>
+            <div id="task-status-badge" class="badge ${task.status === "Completed" ? "badge-success" : task.status === "Deleted" ? "badge-error" : "badge-warning"}">${task.status}</div>
           </div>
-            <input id="editInput-${task.id}" type="text" placeholder="Edit task..." class="input input-sm hidden" value="${task.text} />
+            <input id="editInput-${task.id}" type="text" placeholder="Edit task..." class="input input-sm hidden" value="${task.text}" />
             <div id="task-text-${task.id}" class="">${task.text}</div>
           </div>
           <button onclick="handleEditTask(${task.id})" class="btn btn-square btn-ghost">
