@@ -1,9 +1,10 @@
 //* GRAB ELEMENTS BY THEIR ID'S
-const addTaskButton = document.getElementById("addTaskButton")
-const addTaskText = document.getElementById("addTaskText")
-const listContainer = document.getElementById("listContainer")
+const addTaskButton = document.getElementById("add-task-button")
+const addTaskText = document.getElementById("add-task-text")
+const listContainer = document.getElementById("list-container")
 const taskPriorityBadge = document.getElementById("task-priority-badge")
-const addTaskPriority = document.getElementById("addTaskPriority")
+const addTaskPriority = document.getElementById("add-task-priority")
+const completedContainer = document.getElementById("completed-tasks-container")
 
 
 //* INITIALIZE TASK DATA AND GRAB ANY CURRENT TASKS SAVED IN LOCAL STORAGE
@@ -19,14 +20,15 @@ const deleteIcon = `<svg xmlns="http://www.w3.org/2000/svg" height="20" width="2
 
 
 //* BUILD TODO LIST
-const buildTodoList = (task) => {
-  console.log("task.status", task.status)
-  console.log("task.priority", task.priority)
+const buildTodoList = (task, index) => {
+  console.log("buildTodoList task", task)
+  // console.log("task.status", task.status)
+  // console.log("task.priority", task.priority)
   const badgeColors = task.priority === "Low" ? "badge-info" : task.priority === "Normal" ? "badge-success" : task.priority === "High" ? "badge-warning" : task.priority === "Urgent" ? "badge-error" : "badge-neutral"
  
   return `
       <li id="${task.id}" class="list-row">
-        <div id="task-id" class="text-4xl font-thin opacity-30 tabular-nums">${task.id}</div>
+        <div id="task-id" class="text-4xl font-thin opacity-30 tabular-nums">${index + 1}</div>
         <div class="list-col-grow">
           <div>
             <div id="task-priority-badge" class="badge ${badgeColors}">${task.priority}</div>
@@ -34,38 +36,43 @@ const buildTodoList = (task) => {
             <input id="editInput-${task.id}" type="text" placeholder="Edit task..." class="input input-sm hidden" value="${task.text}" />
             <div id="task-text-${task.id}" class="">${task.text}</div>
           </div>
-          <button onclick="handleEditTask(${task.id})" class="btn btn-square btn-ghost">
+          <button onclick="handleEditTask('${task.id}')" class="btn btn-square btn-ghost">
            ${editIcon}
           </button>
-          <button onclick="handleCompleteTask(${task.id})" class="btn btn-square btn-ghost">
+          <button onclick="handleCompleteTask('${task.id}')" class="btn btn-square btn-ghost">
             ${checkmarkIcon}
           </button>
-      <button onclick="handleDeleteTask(${task.id})" class="btn btn-square btn-ghost">
+      <button onclick="handleDeleteTask('${task.id}')" class="btn btn-square btn-ghost">
         ${deleteIcon}
       </button>
         </li>
       `
 }
 
-//* LOAD DATA FROM LOCAL STORAGE
-if (tasks.length > 0) {
-  tasks.forEach(task => {
-    // Add to HTML
-    listContainer.insertAdjacentHTML("beforeend", buildTodoList(task))
-    })
+//* LOAD TODO LIST DATA FROM LOCAL STORAGE
+const buildTodoListHTML = () => {
+  listContainer.innerHTML = ""
+  if (tasks.length > 0) {
+    tasks.forEach((task, index) => {
+      // Add to HTML
+      listContainer.insertAdjacentHTML("beforeend", buildTodoList(task, index))
+      })
+  }
 }
+buildTodoListHTML()
 
 
 //* ADD NEW TASK
 const handleAddTask = () => {
   console.log("addTaskButton click", addTaskText.value)
   // Create task record
-  const newTask = { id: tasks.length + 1, text: addTaskText.value, priority: addTaskPriority.value, status: "Active" }
+  const newTask = { id: crypto.randomUUID(), text: addTaskText.value, priority: addTaskPriority.value, status: "Active" }
   tasks.push(newTask)
-  console.log("newTask", newTask, "tasks", tasks)
+  console.log("tasks0000", tasks)
+  console.log("newTask", newTask, "tasks", tasks, tasks.length)
   
   // Populate new task item into todo list by pushing new task into list build function (as to not have repeating template literal HTML code in 2 places)
-  const newTaskHTML = buildTodoList(newTask)
+  const newTaskHTML = buildTodoList(newTask, tasks.length - 1)
   listContainer.insertAdjacentHTML("beforeend", newTaskHTML)
   
   // Repopulate entire localStorage with all tasks
@@ -116,7 +123,9 @@ const handleDeleteTask = (id) => {
 let taskCompleteClick = false
 //* COMPLETE TASK
 const handleCompleteTask = (id) => {
+  console.log("tasks1111111", tasks)
   const taskIndex = tasks.findIndex(task => task.id === id)
+  console.log("taskIndex", taskIndex)
 
   if (taskCompleteClick === false) {
     console.log("HERE", tasks[taskIndex])
@@ -125,14 +134,18 @@ const handleCompleteTask = (id) => {
     console.log("completedTask", completedTask)
     completedTasks.push(completedTask)
     console.log("completedTask", completedTask)
+    localStorage.setItem("tasks", JSON.stringify(tasks))
+    localStorage.setItem("completedTasks", JSON.stringify(completedTasks))
+    console.log("taskCompleteClick tasks", tasks)
+    buildTodoListHTML()
+    // buildCompletedList()
   } else {
     taskCompleteClick = true
   }
-  localStorage.setItem("tasks", JSON.stringify(tasks))
-  localStorage.setItem("completedTasks", JSON.stringify(completedTasks))
   console.log("completedTasks", completedTasks)
 
 }
+
 
 //* DISABLE 'ADD TASK' BUTTON IF NO TEXT IN INPUT FIELD
 addTaskText.addEventListener("input", () => {
@@ -146,6 +159,40 @@ addTaskText.addEventListener("input", () => {
 })
 
 
+
+
+//* BUILD COMPLETED TASK LIST
+const buildCompletedList = (task, index) => {
+  // console.log("task.status", task.status)
+  // console.log("task.priority", task.priority)
+  const badgeColors = task.priority === "Low" ? "badge-info" : task.priority === "Normal" ? "badge-success" : task.priority === "High" ? "badge-warning" : task.priority === "Urgent" ? "badge-error" : "badge-neutral"
+ 
+  return `
+      <li id="${task.id}" class="list-row">
+        <div id="task-id" class="text-4xl font-thin opacity-30 tabular-nums">${index + 1}</div>
+        <div class="list-col-grow">
+          <div>
+            <div id="task-priority-badge" class="badge ${badgeColors}">${task.priority}</div>
+          </div>
+            <input id="editInput-${task.id}" type="text" placeholder="Edit task..." class="input input-sm hidden" value="${task.text}" />
+            <div id="task-text-${task.id}" class="">${task.text}</div>
+          </div>
+          
+        </li>
+      `
+}
+
+//* LOAD COMPLETED TASK LIST FROM LOCAL STORAGE
+const buildCompletedListHTML = () => {
+  completedContainer.innerHTML = ""
+  if (completedTasks.length > 0) {
+    completedTasks.forEach((task, index) => {
+      // Add to HTML
+      completedContainer.insertAdjacentHTML("beforeend", buildCompletedList(task, index))
+      })
+  }
+}
+buildCompletedListHTML()
 
 
 //! TASK SCHEMA
