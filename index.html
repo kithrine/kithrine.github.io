@@ -72,7 +72,7 @@
     <fieldset class="fieldset">
       <legend class="fieldset-legend">Add a new task:</legend>
       <div class="flex gap-x-4">
-        <input id="add-task-text" type="text" class="input bg-neutral" placeholder="What to do..." />
+        <input id="add-task-text" type="text" class="input bg-neutral w-[65%]" placeholder="What to do..." />
         <label class="select bg-neutral">
           <span class="label opacity-">Priority Level</span>
           <select id="add-task-priority" class="">
@@ -83,8 +83,8 @@
             <option value="Urgent" class="bg-error text-neutral hover:text-neutral-content">Urgent</option>
           </select>
         </label>
-        <button onclick="handleAddTask()" id="add-task-button" class="btn btn-dash btn-info" disabled>Add Task</button>
-        <button class="btn btn-soft btn-warning">Cancel</button>
+        <button onclick="handleAddTask()" id="add-task-button" class="btn btn-dash btn-primary" disabled>Add Task</button>
+        <button onclick="handleCancelTask()" class="btn btn-soft btn-warning">Cancel</button>
       </div>
     </fieldset>
 
@@ -100,7 +100,7 @@
      Completed
   </label>
   <div class="tab-content bg-base-100 border-base-300 p-6">
-    <div class="p-4 pb-2 text-sm tracking-wide uppercase mt-8">Completed Tasks</div>
+    <div class="p-4 pb-2 text-sm tracking-wide uppercase">Completed Tasks</div>
     <ul id="completed-tasks-container" class="list bg-base-200 rounded-box shadow-md">
     </ul>
   </div>
@@ -111,7 +111,25 @@
     Notes
   </label>
   <div class="tab-content bg-base-100 border-base-300 p-6">
-    Tab content 3
+    <div class="p-4 pb-2 text-sm tracking-wide uppercase">Add a new note:</div>
+    <label class="floating-label">
+      <input id="add-note-title" type="text" placeholder="Title" class="input input-md bg-neutral" />
+      <span class="text-xl">Title</span>
+    </label>
+    <div class="pt-3">
+      <label class="floating-label">
+        <!-- <input type="text" placeholder="Title" class="input input-md" /> -->
+        <textarea id="add-note-text" class="textarea w-[100%] h-36 bg-neutral" placeholder="Type note here..."></textarea>
+        <span>Note</span>
+      </label>
+    </div>
+    <div class="pt-3">
+      <button onclick="handleAddNote()" id="add-note-button" class="btn btn-dash btn-primary" disabled>Add Note</button>
+      <button onclick="handleCancelNote()" class="btn btn-soft btn-warning">Cancel</button>
+    </div>
+    <div class="p-4 pb-2 text-sm tracking-wide uppercase mt-8">Notes</div>
+    <ul id="notes-container" class="list bg-base-200 rounded-box shadow-md">
+    </ul>
   </div>
 
   <label class="tab">

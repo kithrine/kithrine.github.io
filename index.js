@@ -5,11 +5,16 @@ const listContainer = document.getElementById("list-container")
 const taskPriorityBadge = document.getElementById("task-priority-badge")
 const addTaskPriority = document.getElementById("add-task-priority")
 const completedContainer = document.getElementById("completed-tasks-container")
+const notesContainer = document.getElementById("notes-container")
+const addNoteButton = document.getElementById("add-note-button")
+const addNoteTitle = document.getElementById("add-note-title")
+const addNoteText = document.getElementById("add-note-text")
 
 
 //* INITIALIZE TASK DATA AND GRAB ANY CURRENT TASKS SAVED IN LOCAL STORAGE
 const tasks = JSON.parse(localStorage.getItem("tasks")) || []
 const completedTasks = JSON.parse(localStorage.getItem("completedTasks")) || []
+const notes = JSON.parse(localStorage.getItem("notes")) || []
 
 //* SVG ICONS
 const editIcon = `<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="currentColor" viewBox="0 0 640 640"><path d="M100.4 417.2C104.5 402.6 112.2 389.3 123 378.5L304.2 197.3L338.1 163.4C354.7 180 389.4 214.7 442.1 267.4L476 301.3L442.1 335.2L260.9 516.4C250.2 527.1 236.8 534.9 222.2 539L94.4 574.6C86.1 576.9 77.1 574.6 71 568.4C64.9 562.2 62.6 553.3 64.9 545L100.4 417.2zM156 413.5C151.6 418.2 148.4 423.9 146.7 430.1L122.6 517L209.5 492.9C215.9 491.1 221.7 487.8 226.5 483.2L155.9 413.5zM510 267.4C493.4 250.8 458.7 216.1 406 163.4L372 129.5C398.5 103 413.4 88.1 416.9 84.6C430.4 71 448.8 63.4 468 63.4C487.2 63.4 505.6 71 519.1 84.6L554.8 120.3C568.4 133.9 576 152.3 576 171.4C576 190.5 568.4 209 554.8 222.5C551.3 226 536.4 240.9 509.9 267.4z"/></svg>`
@@ -32,12 +37,12 @@ const buildTodoList = (task, index) => {
         <div id="task-id" class="text-4xl font-thin opacity-30 tabular-nums">${index + 1}</div>
         <div class="list-col-grow">
           <div>
-            <select id="edit-priority-dropdown-${task.id}" class="badge badge-neutral hidden">
+            <select id="edit-priority-dropdown-${task.id}" class="badge badge-neutral border-base-content/50 hidden">
               <option disabled selected value="${task.priority}" class="bg-base-200">${task.priority}</option>
-              <option value="Low">Low</option>
-              <option value="Normal">Normal</option>
-              <option value="High">High</option>
-              <option value="Urgent">Urgent</option>
+              <option value="Low" class="bg-info text-neutral hover:text-neutral-content">Low</option>
+              <option value="Normal" class="bg-success text-neutral hover:text-neutral-content">Normal</option>
+              <option value="High" class="bg-warning text-neutral hover:text-neutral-content">High</option>
+              <option value="Urgent" class="bg-error text-neutral hover:text-neutral-content">Urgent</option>
             </select>
             <div id="task-priority-badge-${task.id}" class="badge ${badgeColors}">${task.priority}</div>
           </div>
@@ -164,9 +169,13 @@ const handleCompleteTask = (id) => {
     taskCompleteClick = true
   }
   console.log("completedTasks", completedTasks)
-
 }
 
+//* CLEAR OUT ADD TASK INPUT
+const handleCancelTask = () => {
+  addTaskText.value = ""
+  addTaskButton.setAttribute("disabled", "")
+}
 
 //* DISABLE 'ADD TASK' BUTTON IF NO TEXT IN INPUT FIELD/NO PRIORITY LEVEL SELECTED
 addTaskText.addEventListener("input", () => {
@@ -217,12 +226,135 @@ buildCompletedListHTML()
 
 
 //! NOTES
+//* BUILD NOTES LIST
+const buildNotesList = (note, index) => {
+  return `
+    <li id="${note.id}" class="list-row">
+        <div id="note-id" class="text-4xl font-thin opacity-30 tabular-nums">${index + 1}</div>
+        <div>
+          <div id="note-title-${note.id}" class="text-base uppercase opacity-70">${note.title}</div>
+        </div>
+        <p id="note-text-${note.id}" class="list-col-wrap text-sm">
+          ${note.text}
+        </p>
+        <textarea id="edit-note-textarea-${note.id}" class="textarea bg-neutral hidden"></textarea>
+        <button class="btn btn-square btn-ghost">
+          <svg class="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor"><path d="M6 3L20 12 6 21 6 3z"></path></g></svg>
+        </button>
+        <button class="btn btn-square btn-ghost">
+          <svg class="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></g></svg>
+        </button>
+      </li>
+      `
+}
 
+//* LOAD NOTES LIST FROM LOCAL STORAGE
+const buildNotesListHTML = () => {
+  notesContainer.innerHTML = ""
+  if (notes.length > 0) {
+    notes.forEach((note, index) => {
+      // Add to HTML
+      notesContainer.insertAdjacentHTML("beforeend", buildNotesList(note, index))
+      })
+  }
+}
+buildNotesListHTML()
 
-//! TASK SCHEMA
+//* ADD NEW NOTE
+const handleAddNote = () => {
+  // Create note record
+  const newNote = { id: crypto.randomUUID(), title: addNoteTitle.value, text: addNoteText.value }
+  notes.push(newNote)
+  
+  // Populate new note item into todo list by pushing new note into list build function (as to not have repeating template literal HTML code in 2 places)
+  const newNoteHTML = buildNotesList(newNote, notes.length - 1)
+  notesContainer.insertAdjacentHTML("beforeend", newNoteHTML)
+  
+  // Repopulate entire localStorage with all notes
+  localStorage.setItem("notes", JSON.stringify(notes))
+
+  // Clear title and note text
+  addNoteText.value = ""
+  // Re-disable 'Add Note' button
+  addNoteButton.setAttribute("disabled", "")
+}
+
+//* EDIT NOTE
+let currentlyEditingNote = false
+// console.log("first currentlyEditingNote", currentlyEditingNote)
+const handleEditNote = (id) => {
+  // Get task info
+  const taskText = document.getElementById(`task-text-${id}`)
+  const editInput = document.getElementById(`editInput-${id}`)
+  const priorityBadge = document.getElementById(`task-priority-badge-${id}`)
+  const editPriorityDropdown = document.getElementById(`edit-priority-dropdown-${id}`)
+  
+  const taskIndex = tasks.findIndex(task => task.id === id)
+
+  if (currentlyEditingNote === false) {
+    currentlyEditingNote = true
+    // console.log("second currentlyEditingNote", currentlyEditingNote)
+    editInput.classList.remove("hidden")
+    taskText.classList.add("hidden")
+    editPriorityDropdown.classList.remove("hidden")
+    priorityBadge.classList.add("hidden")
+
+  } else {
+    currentlyEditingNote = false
+    // console.log("third currentlyEditingNote", currentlyEditingNote)
+    let updatedTaskText = editInput.value
+    tasks[taskIndex].text = updatedTaskText
+    let updatedPriority = editPriorityDropdown.value
+    tasks[taskIndex].priority = updatedPriority
+    localStorage.setItem("tasks", JSON.stringify(tasks))
+    taskText.innerHTML = updatedTaskText
+    priorityBadge.innerHTML = updatedPriority
+    editInput.classList.add("hidden")
+    taskText.classList.remove("hidden")
+    editPriorityDropdown.classList.add("hidden")
+    priorityBadge.classList.remove("hidden")
+    buildTodoListHTML()
+  }
+}
+
+//* DELETE/REMOVE NOTE (ARCHIVE)
+const handleDeleteNote = (id) => {
+  let taskItem = document.getElementById(id)
+  let taskIndex = tasks.findIndex(task => task.id === id)
+  tasks.splice(taskIndex, 1)
+  localStorage.setItem("tasks", JSON.stringify(tasks))
+  taskItem.remove()
+}
+
+//* CLEAR OUT ADD NOTE INPUT
+const handleCancelNote = () => {
+  addNoteText.value = ""
+  addNoteButton.setAttribute("disabled", "")
+}
+
+//* DISABLE 'ADD NOTE' BUTTON IF NO TEXT IN INPUT FIELD/NO PRIORITY LEVEL SELECTED
+addNoteText.addEventListener("input", () => {
+  if (addNoteTitle.value !== "" && addNoteText.value !== "") {
+    // addNoteButton.classList.remove("btn-disabled")
+    addNoteButton.removeAttribute("disabled")
+  } else {
+    // addNoteButton.classList.add("btn-disabled")
+    addNoteButton.setAttribute("disabled", "")
+  }
+})
+
+//! SCHEMAS
+//* TASK SCHEMA
+// id
+// text
 // status: "Active", "Completed", "Deleted"
-// priority: "Urgent", "High", "Normal", "Low"
-
+// priority: "Low", "Normal", "High", "Urgent"
+//* NOTES SCHEMA
+// id
+// title
+// text
+// isArchived?
+// category?
 
 
 // STATUS PING CIRCLE
