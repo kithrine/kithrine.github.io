@@ -19,22 +19,30 @@ const checkmarkIcon = `<svg xmlns="http://www.w3.org/2000/svg" height="20" width
 const deleteIcon = `<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="currentColor" viewBox="0 0 640 640"><path d="M232.7 69.9C237.1 56.8 249.3 48 263.1 48L377 48C390.8 48 403 56.8 407.4 69.9L416 96L512 96C529.7 96 544 110.3 544 128C544 145.7 529.7 160 512 160L128 160C110.3 160 96 145.7 96 128C96 110.3 110.3 96 128 96L224 96L232.7 69.9zM128 208L512 208L512 512C512 547.3 483.3 576 448 576L192 576C156.7 576 128 547.3 128 512L128 208zM216 272C202.7 272 192 282.7 192 296L192 488C192 501.3 202.7 512 216 512C229.3 512 240 501.3 240 488L240 296C240 282.7 229.3 272 216 272zM320 272C306.7 272 296 282.7 296 296L296 488C296 501.3 306.7 512 320 512C333.3 512 344 501.3 344 488L344 296C344 282.7 333.3 272 320 272zM424 272C410.7 272 400 282.7 400 296L400 488C400 501.3 410.7 512 424 512C437.3 512 448 501.3 448 488L448 296C448 282.7 437.3 272 424 272z"/></svg>`
 
 
+//! MAIN TODO LIST
 //* BUILD TODO LIST
 const buildTodoList = (task, index) => {
-  console.log("buildTodoList task", task)
+  // console.log("buildTodoList task", task)
   // console.log("task.status", task.status)
   // console.log("task.priority", task.priority)
   const badgeColors = task.priority === "Low" ? "badge-info" : task.priority === "Normal" ? "badge-success" : task.priority === "High" ? "badge-warning" : task.priority === "Urgent" ? "badge-error" : "badge-neutral"
  
   return `
-      <li id="${task.id}" class="list-row">
+      <li id="${task.id}" class="list-row pb-1">
         <div id="task-id" class="text-4xl font-thin opacity-30 tabular-nums">${index + 1}</div>
         <div class="list-col-grow">
           <div>
-            <div id="task-priority-badge" class="badge ${badgeColors}">${task.priority}</div>
+            <select id="edit-priority-dropdown-${task.id}" class="badge badge-neutral hidden">
+              <option disabled selected value="${task.priority}" class="bg-base-200">${task.priority}</option>
+              <option value="Low">Low</option>
+              <option value="Normal">Normal</option>
+              <option value="High">High</option>
+              <option value="Urgent">Urgent</option>
+            </select>
+            <div id="task-priority-badge-${task.id}" class="badge ${badgeColors}">${task.priority}</div>
           </div>
-            <input id="editInput-${task.id}" type="text" placeholder="Edit task..." class="input input-sm hidden" value="${task.text}" />
-            <div id="task-text-${task.id}" class="">${task.text}</div>
+            <input id="editInput-${task.id}" type="text" placeholder="Edit task..." class="input input-sm hidden mt-1 text-base mb-1" value="${task.text}" />
+            <div id="task-text-${task.id}" class="pt-2 pb-1.5 text-base">${task.text}</div>
           </div>
           <button onclick="handleEditTask('${task.id}')" class="btn btn-square btn-ghost">
            ${editIcon}
@@ -79,8 +87,9 @@ const handleAddTask = () => {
   localStorage.setItem("tasks", JSON.stringify(tasks))
   // console.log("JSON.stringify newTask", JSON.stringify(newTask))
 
-  // Clear form
+  // Clear input text and reset priority level to Normal
   addTaskText.value = ""
+  addTaskPriority.value = "Normal"
   // Re-disable 'Add Task' button
   addTaskButton.setAttribute("disabled", "")
 }
@@ -92,6 +101,9 @@ const handleEditTask = (id) => {
   // Get task info
   const taskText = document.getElementById(`task-text-${id}`)
   const editInput = document.getElementById(`editInput-${id}`)
+  const priorityBadge = document.getElementById(`task-priority-badge-${id}`)
+  const editPriorityDropdown = document.getElementById(`edit-priority-dropdown-${id}`)
+  
   const taskIndex = tasks.findIndex(task => task.id === id)
 
   if (currentlyEditing === false) {
@@ -99,15 +111,24 @@ const handleEditTask = (id) => {
     // console.log("second currentlyEditing", currentlyEditing)
     editInput.classList.remove("hidden")
     taskText.classList.add("hidden")
+    editPriorityDropdown.classList.remove("hidden")
+    priorityBadge.classList.add("hidden")
+
   } else {
     currentlyEditing = false
     // console.log("third currentlyEditing", currentlyEditing)
-    let newTaskText = editInput.value
-    tasks[taskIndex].text = newTaskText
+    let updatedTaskText = editInput.value
+    tasks[taskIndex].text = updatedTaskText
+    let updatedPriority = editPriorityDropdown.value
+    tasks[taskIndex].priority = updatedPriority
     localStorage.setItem("tasks", JSON.stringify(tasks))
-    taskText.innerHTML = newTaskText
+    taskText.innerHTML = updatedTaskText
+    priorityBadge.innerHTML = updatedPriority
     editInput.classList.add("hidden")
     taskText.classList.remove("hidden")
+    editPriorityDropdown.classList.add("hidden")
+    priorityBadge.classList.remove("hidden")
+    buildTodoListHTML()
   }
 }
 
@@ -147,7 +168,7 @@ const handleCompleteTask = (id) => {
 }
 
 
-//* DISABLE 'ADD TASK' BUTTON IF NO TEXT IN INPUT FIELD
+//* DISABLE 'ADD TASK' BUTTON IF NO TEXT IN INPUT FIELD/NO PRIORITY LEVEL SELECTED
 addTaskText.addEventListener("input", () => {
   if (addTaskText.value !== "") {
     // addTaskButton.classList.remove("btn-disabled")
@@ -160,7 +181,7 @@ addTaskText.addEventListener("input", () => {
 
 
 
-
+//! COMPLETED TASKS LIST
 //* BUILD COMPLETED TASK LIST
 const buildCompletedList = (task, index) => {
   // console.log("task.status", task.status)
@@ -195,17 +216,14 @@ const buildCompletedListHTML = () => {
 buildCompletedListHTML()
 
 
+//! NOTES
+
+
 //! TASK SCHEMA
 // status: "Active", "Completed", "Deleted"
 // priority: "Urgent", "High", "Normal", "Low"
 
-// SELECT DROPDOWN - badge style
-{/* <select id="edit-status-dropdown-${task.id}" class="badge badge-neutral">
-<option disabled selected value="${task.status}">${task.status}</option>
-<option value="Active">Active</option>
-<option value="Completed">Completed</option>
-<option value="Deleted">Deleted</option>
-</select> */}
+
 
 // STATUS PING CIRCLE
 {/* <div class="inline-grid *:[grid-area:1/1]">
