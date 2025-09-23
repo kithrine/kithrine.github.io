@@ -144,6 +144,7 @@ const handleDeleteTask = (id) => {
   tasks.splice(taskIndex, 1)
   localStorage.setItem("tasks", JSON.stringify(tasks))
   taskItem.remove()
+  buildTodoListHTML()
 }
 
 let taskCompleteClick = false
@@ -190,6 +191,16 @@ addTaskText.addEventListener("input", () => {
 
 
 
+
+
+
+
+
+
+
+
+
+
 //! COMPLETED TASKS LIST
 //* BUILD COMPLETED TASK LIST
 const buildCompletedList = (task, index) => {
@@ -225,24 +236,34 @@ const buildCompletedListHTML = () => {
 buildCompletedListHTML()
 
 
+
+
+
+
+
+
+
+
+
+
 //! NOTES
 //* BUILD NOTES LIST
 const buildNotesList = (note, index) => {
   return `
     <li id="${note.id}" class="list-row">
         <div id="note-id" class="text-4xl font-thin opacity-30 tabular-nums">${index + 1}</div>
-        <div>
-          <div id="note-title-${note.id}" class="text-base uppercase opacity-70">${note.title}</div>
+        <div class="flex items-center">
+          <div id="note-title-${note.id}" class="text-lg uppercase opacity-80">${note.title}</div>
         </div>
         <p id="note-text-${note.id}" class="list-col-wrap text-sm">
           ${note.text}
         </p>
-        <textarea id="edit-note-textarea-${note.id}" class="textarea bg-neutral hidden"></textarea>
-        <button class="btn btn-square btn-ghost">
-          <svg class="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor"><path d="M6 3L20 12 6 21 6 3z"></path></g></svg>
+        <textarea id="edit-note-textarea-${note.id}" class="textarea list-col-wrap  bg-neutral w-full h-36 hidden" value="${note.text}">${note.text}</textarea>
+        <button onclick="handleEditNote('${note.id}')" class="btn btn-square btn-ghost">
+          ${editIcon}
         </button>
-        <button class="btn btn-square btn-ghost">
-          <svg class="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></g></svg>
+        <button onclick="handleDeleteNote('${note.id}')" class="btn btn-square btn-ghost">
+          ${deleteIcon}
         </button>
       </li>
       `
@@ -274,6 +295,7 @@ const handleAddNote = () => {
   localStorage.setItem("notes", JSON.stringify(notes))
 
   // Clear title and note text
+  addNoteTitle.value = ""
   addNoteText.value = ""
   // Re-disable 'Add Note' button
   addNoteButton.setAttribute("disabled", "")
@@ -283,47 +305,36 @@ const handleAddNote = () => {
 let currentlyEditingNote = false
 // console.log("first currentlyEditingNote", currentlyEditingNote)
 const handleEditNote = (id) => {
-  // Get task info
-  const taskText = document.getElementById(`task-text-${id}`)
-  const editInput = document.getElementById(`editInput-${id}`)
-  const priorityBadge = document.getElementById(`task-priority-badge-${id}`)
-  const editPriorityDropdown = document.getElementById(`edit-priority-dropdown-${id}`)
-  
-  const taskIndex = tasks.findIndex(task => task.id === id)
+  // Get note info
+  const noteText = document.getElementById(`note-text-${id}`)
+  const editNoteTextarea = document.getElementById(`edit-note-textarea-${id}`)  
+  const noteIndex = notes.findIndex(note => note.id === id)
 
   if (currentlyEditingNote === false) {
     currentlyEditingNote = true
-    // console.log("second currentlyEditingNote", currentlyEditingNote)
-    editInput.classList.remove("hidden")
-    taskText.classList.add("hidden")
-    editPriorityDropdown.classList.remove("hidden")
-    priorityBadge.classList.add("hidden")
+    editNoteTextarea.classList.remove("hidden")
+    noteText.classList.add("hidden")
 
   } else {
     currentlyEditingNote = false
-    // console.log("third currentlyEditingNote", currentlyEditingNote)
-    let updatedTaskText = editInput.value
-    tasks[taskIndex].text = updatedTaskText
-    let updatedPriority = editPriorityDropdown.value
-    tasks[taskIndex].priority = updatedPriority
-    localStorage.setItem("tasks", JSON.stringify(tasks))
-    taskText.innerHTML = updatedTaskText
-    priorityBadge.innerHTML = updatedPriority
-    editInput.classList.add("hidden")
-    taskText.classList.remove("hidden")
-    editPriorityDropdown.classList.add("hidden")
-    priorityBadge.classList.remove("hidden")
-    buildTodoListHTML()
+    let updatedNoteText = editNoteTextarea.value
+    notes[noteIndex].text = updatedNoteText
+    localStorage.setItem("notes", JSON.stringify(notes))
+    noteText.innerHTML = updatedNoteText
+    editNoteTextarea.classList.add("hidden")
+    noteText.classList.remove("hidden")
+    buildNotesListHTML()
   }
 }
 
 //* DELETE/REMOVE NOTE (ARCHIVE)
 const handleDeleteNote = (id) => {
-  let taskItem = document.getElementById(id)
-  let taskIndex = tasks.findIndex(task => task.id === id)
-  tasks.splice(taskIndex, 1)
-  localStorage.setItem("tasks", JSON.stringify(tasks))
-  taskItem.remove()
+  let noteItem = document.getElementById(id)
+  let noteIndex = notes.findIndex(note => note.id === id)
+  notes.splice(noteIndex, 1)
+  localStorage.setItem("notes", JSON.stringify(notes))
+  noteItem.remove()
+  buildNotesListHTML()
 }
 
 //* CLEAR OUT ADD NOTE INPUT
@@ -333,7 +344,7 @@ const handleCancelNote = () => {
 }
 
 //* DISABLE 'ADD NOTE' BUTTON IF NO TEXT IN INPUT FIELD/NO PRIORITY LEVEL SELECTED
-addNoteText.addEventListener("input", () => {
+const noteValidityCheck = () => {
   if (addNoteTitle.value !== "" && addNoteText.value !== "") {
     // addNoteButton.classList.remove("btn-disabled")
     addNoteButton.removeAttribute("disabled")
@@ -341,6 +352,13 @@ addNoteText.addEventListener("input", () => {
     // addNoteButton.classList.add("btn-disabled")
     addNoteButton.setAttribute("disabled", "")
   }
+}
+
+addNoteTitle.addEventListener("input", () => {
+  noteValidityCheck()
+})
+addNoteText.addEventListener("input", () => {
+  noteValidityCheck()
 })
 
 //! SCHEMAS
