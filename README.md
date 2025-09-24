@@ -2,6 +2,16 @@
 
 
 ## Features
+- Javascript
+- Tailwindcss
+- DaisyUI
+- Hero Patterns
+- Dark/Light mode theme toggle (!)
+- Google Fonts
+
+- crypto.randomUUID() method for the task.id and note.id to help with errors of using the index or tasks.length for the id on 
+- Dynamic classes for the priority badge
+
 
 ## Future Considerations
 

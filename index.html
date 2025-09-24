@@ -33,7 +33,7 @@
       <a class="btn btn-ghost text-xl">Daisy To Do</a>
     </div>
     <div class="flex gap-2">
-      <input type="text" placeholder="Search" class="input input-bordered w-24 md:w-auto" />
+      <input id="searchbox" type="text" placeholder="Search" class="input input-bordered w-24 md:w-auto" />
       <div class="dropdown dropdown-end">
         <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
           <div class="w-10 rounded-full">
@@ -89,7 +89,7 @@
     </fieldset>
 
     <div class="p-4 pb-2 text-sm tracking-wide uppercase mt-8">Tasks</div>
-    <ul id="list-container" class="list bg-base-200 rounded-box shadow-md">
+    <ul id="todo-list-container" class="list bg-base-200 rounded-box shadow-md overflow-y-auto max-h-[70vh]">
     </ul>
   </div>
 
@@ -101,7 +101,7 @@
   </label>
   <div class="tab-content bg-base-100 border-base-300 p-6">
     <div class="p-4 pb-2 text-sm tracking-wide uppercase">Completed Tasks</div>
-    <ul id="completed-tasks-container" class="list bg-base-200 rounded-box shadow-md">
+    <ul id="completed-tasks-container" class="list bg-base-200 rounded-box shadow-md overflow-y-auto max-h-[80vh]">
     </ul>
   </div>
 
@@ -128,7 +128,7 @@
       <button onclick="handleCancelNote()" class="btn btn-soft btn-warning">Cancel</button>
     </div>
     <div class="p-4 pb-2 text-sm tracking-wide uppercase mt-8">Notes</div>
-    <ul id="notes-container" class="list bg-base-200 rounded-box shadow-md">
+    <ul id="notes-container" class="list bg-base-200 rounded-box shadow-md overflow-y-auto max-h-[80vh]">
     </ul>
   </div>
 
@@ -137,7 +137,9 @@
     Urgent
   </label>
   <div class="tab-content bg-base-100 border-base-300 p-6">
-    Urgent List
+    <div class="p-4 pb-2 text-sm tracking-wide uppercase">Urgent Priority Tasks</div>
+    <ul id="urgent-tasks-container" class="list bg-base-200 rounded-box shadow-md overflow-y-auto max-h-[70vh]">
+    </ul>
   </div>
 
   <label class="tab">
@@ -145,7 +147,9 @@
     High
   </label>
   <div class="tab-content bg-base-100 border-base-300 p-6">
-    High
+    <div class="p-4 pb-2 text-sm tracking-wide uppercase">High Priority Tasks</div>
+    <ul id="high-tasks-container" class="list bg-base-200 rounded-box shadow-md overflow-y-auto max-h-[70vh]">
+    </ul>
   </div>
 
   <label class="tab">
@@ -153,7 +157,9 @@
     Normal
   </label>
   <div class="tab-content bg-base-100 border-base-300 p-6">
-    Normal
+    <div class="p-4 pb-2 text-sm tracking-wide uppercase">Normal Priority Tasks</div>
+    <ul id="normal-tasks-container" class="list bg-base-200 rounded-box shadow-md overflow-y-auto max-h-[70vh]">
+    </ul>
   </div>
 
   <label class="tab">
@@ -161,7 +167,9 @@
     Low
   </label>
   <div class="tab-content bg-base-100 border-base-300 p-6">
-    Low
+    <div class="p-4 pb-2 text-sm tracking-wide uppercase">Low Priority Tasks</div>
+    <ul id="low-tasks-container" class="list bg-base-200 rounded-box shadow-md overflow-y-auto max-h-[70vh]">
+    </ul>
   </div>
 
 </div>

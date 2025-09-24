@@ -1,7 +1,7 @@
 //* GRAB ELEMENTS BY THEIR ID'S
 const addTaskButton = document.getElementById("add-task-button")
 const addTaskText = document.getElementById("add-task-text")
-const listContainer = document.getElementById("list-container")
+const todoListContainer = document.getElementById("todo-list-container")
 const taskPriorityBadge = document.getElementById("task-priority-badge")
 const addTaskPriority = document.getElementById("add-task-priority")
 const completedContainer = document.getElementById("completed-tasks-container")
@@ -9,12 +9,17 @@ const notesContainer = document.getElementById("notes-container")
 const addNoteButton = document.getElementById("add-note-button")
 const addNoteTitle = document.getElementById("add-note-title")
 const addNoteText = document.getElementById("add-note-text")
+const urgentTasksContainer = document.getElementById("urgent-tasks-container")
+const highTasksContainer = document.getElementById("high-tasks-container")
+const normalTasksContainer = document.getElementById("normal-tasks-container")
+const lowTasksContainer = document.getElementById("low-tasks-container")
 
 
 //* INITIALIZE TASK DATA AND GRAB ANY CURRENT TASKS SAVED IN LOCAL STORAGE
 const tasks = JSON.parse(localStorage.getItem("tasks")) || []
 const completedTasks = JSON.parse(localStorage.getItem("completedTasks")) || []
 const notes = JSON.parse(localStorage.getItem("notes")) || []
+
 
 //* SVG ICONS
 const editIcon = `<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="currentColor" viewBox="0 0 640 640"><path d="M100.4 417.2C104.5 402.6 112.2 389.3 123 378.5L304.2 197.3L338.1 163.4C354.7 180 389.4 214.7 442.1 267.4L476 301.3L442.1 335.2L260.9 516.4C250.2 527.1 236.8 534.9 222.2 539L94.4 574.6C86.1 576.9 77.1 574.6 71 568.4C64.9 562.2 62.6 553.3 64.9 545L100.4 417.2zM156 413.5C151.6 418.2 148.4 423.9 146.7 430.1L122.6 517L209.5 492.9C215.9 491.1 221.7 487.8 226.5 483.2L155.9 413.5zM510 267.4C493.4 250.8 458.7 216.1 406 163.4L372 129.5C398.5 103 413.4 88.1 416.9 84.6C430.4 71 448.8 63.4 468 63.4C487.2 63.4 505.6 71 519.1 84.6L554.8 120.3C568.4 133.9 576 152.3 576 171.4C576 190.5 568.4 209 554.8 222.5C551.3 226 536.4 240.9 509.9 267.4z"/></svg>`
@@ -64,11 +69,11 @@ const buildTodoList = (task, index) => {
 
 //* LOAD TODO LIST DATA FROM LOCAL STORAGE
 const buildTodoListHTML = () => {
-  listContainer.innerHTML = ""
+  todoListContainer.innerHTML = ""
   if (tasks.length > 0) {
     tasks.forEach((task, index) => {
       // Add to HTML
-      listContainer.insertAdjacentHTML("beforeend", buildTodoList(task, index))
+      todoListContainer.insertAdjacentHTML("beforeend", buildTodoList(task, index))
       })
   }
 }
@@ -86,7 +91,7 @@ const handleAddTask = () => {
   
   // Populate new task item into todo list by pushing new task into list build function (as to not have repeating template literal HTML code in 2 places)
   const newTaskHTML = buildTodoList(newTask, tasks.length - 1)
-  listContainer.insertAdjacentHTML("beforeend", newTaskHTML)
+  todoListContainer.insertAdjacentHTML("beforeend", newTaskHTML)
   
   // Repopulate entire localStorage with all tasks
   localStorage.setItem("tasks", JSON.stringify(tasks))
@@ -97,6 +102,7 @@ const handleAddTask = () => {
   addTaskPriority.value = "Normal"
   // Re-disable 'Add Task' button
   addTaskButton.setAttribute("disabled", "")
+  buildAllTaskHTMLFunctions()
 }
 
 //* EDIT TASK
@@ -133,18 +139,19 @@ const handleEditTask = (id) => {
     taskText.classList.remove("hidden")
     editPriorityDropdown.classList.add("hidden")
     priorityBadge.classList.remove("hidden")
-    buildTodoListHTML()
+    buildAllTaskHTMLFunctions()
   }
 }
 
-//* DELETE/REMOVE TASK (ARCHIVE)
+// todo: One day make the tasks ARCHIVED instead of deleting
+//* DELETE/REMOVE TASK
 const handleDeleteTask = (id) => {
   let taskItem = document.getElementById(id)
   let taskIndex = tasks.findIndex(task => task.id === id)
   tasks.splice(taskIndex, 1)
   localStorage.setItem("tasks", JSON.stringify(tasks))
   taskItem.remove()
-  buildTodoListHTML()
+  buildAllTaskHTMLFunctions()
 }
 
 let taskCompleteClick = false
@@ -164,8 +171,7 @@ const handleCompleteTask = (id) => {
     localStorage.setItem("tasks", JSON.stringify(tasks))
     localStorage.setItem("completedTasks", JSON.stringify(completedTasks))
     console.log("taskCompleteClick tasks", tasks)
-    buildTodoListHTML()
-    // buildCompletedList()
+    buildAllTaskHTMLFunctions()
   } else {
     taskCompleteClick = true
   }
@@ -360,6 +366,247 @@ addNoteTitle.addEventListener("input", () => {
 addNoteText.addEventListener("input", () => {
   noteValidityCheck()
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//! DYNAMIC SEARCH FILTERING
+const searchbox = document.getElementById("searchbox")
+
+const dynamicSearchFilter = () => {
+  const searchTerm = searchbox.value.toLowerCase()
+
+  // Filter Todo List 'tasks' array based on the search term
+  const filteredTasks = tasks.filter(task => {
+    return (
+      task.text.toLowerCase().includes(searchTerm) || // search task text
+      task.priority.toLowerCase().includes(searchTerm) // search priority level
+    )
+  })
+
+  const filteredCompletedTasks = completedTasks.filter(completedTask => {
+    return (
+      completedTask.text.toLowerCase().includes(searchTerm) ||
+      completedTask.priority.toLowerCase().includes(searchTerm)
+    )
+  })
+
+  const filteredNotes = notes.filter(note => {
+    return (
+      note.title.toLowerCase().includes(searchTerm) ||
+      note.text.toLowerCase().includes(searchTerm)
+    )
+  })
+  displayTodoTasks(filteredTasks) // Render the filtered tasks in Todo List
+  displayCompletedTasks(filteredCompletedTasks) // Render the filtered tasks in Completed List
+  displayNotes(filteredNotes) // Render the filtered notes in Notes List
+}
+
+const displayTodoTasks = (tasks) => {
+  todoListContainer.innerHTML = "" // clear exisiting tasks
+
+  tasks.forEach((task, index) => {
+    const badgeColors = task.priority === "Low" ? "badge-info" : task.priority === "Normal" ? "badge-success" : task.priority === "High" ? "badge-warning" : task.priority === "Urgent" ? "badge-error" : "badge-neutral"
+
+    const taskItem = `
+      <li id="${task.id}" class="list-row pb-1">
+        <div id="task-id" class="text-4xl font-thin opacity-30 tabular-nums">${index + 1}</div>
+        <div class="list-col-grow">
+          <div>
+            <select id="edit-priority-dropdown-${task.id}" class="badge badge-neutral border-base-content/50 hidden">
+              <option disabled selected value="${task.priority}" class="bg-base-200">${task.priority}</option>
+              <option value="Low" class="bg-info text-neutral hover:text-neutral-content">Low</option>
+              <option value="Normal" class="bg-success text-neutral hover:text-neutral-content">Normal</option>
+              <option value="High" class="bg-warning text-neutral hover:text-neutral-content">High</option>
+              <option value="Urgent" class="bg-error text-neutral hover:text-neutral-content">Urgent</option>
+            </select>
+            <div id="task-priority-badge-${task.id}" class="badge ${badgeColors}">${task.priority}</div>
+          </div>
+            <input id="editInput-${task.id}" type="text" placeholder="Edit task..." class="input input-sm hidden mt-1 text-base mb-1" value="${task.text}" />
+            <div id="task-text-${task.id}" class="pt-2 pb-1.5 text-base">${task.text}</div>
+          </div>
+          <button onclick="handleEditTask('${task.id}')" class="btn btn-square btn-ghost">
+           ${editIcon}
+          </button>
+          <button onclick="handleCompleteTask('${task.id}')" class="btn btn-square btn-ghost">
+            ${checkmarkIcon}
+          </button>
+        <button onclick="handleDeleteTask('${task.id}')" class="btn btn-square btn-ghost">
+          ${deleteIcon}
+        </button>
+      </li>
+    `
+    todoListContainer.insertAdjacentHTML("beforeend", taskItem)
+  })
+}
+
+const displayCompletedTasks = (completedTasks) => {
+  completedContainer.innerHTML = "" // clear exisiting completed tasks
+
+  completedTasks.forEach((completedTask, index) => {
+    const badgeColors = completedTask.priority === "Low" ? "badge-info" : completedTask.priority === "Normal" ? "badge-success" : completedTask.priority === "High" ? "badge-warning" : completedTask.priority === "Urgent" ? "badge-error" : "badge-neutral"
+
+    const completedTaskItem = `
+      <li id="${completedTask.id}" class="list-row">
+        <div id="task-id" class="text-4xl font-thin opacity-30 tabular-nums">${index + 1}</div>
+        <div class="list-col-grow">
+          <div>
+            <div id="task-priority-badge" class="badge ${badgeColors}">${completedTask.priority}</div>
+          </div>
+          <input id="editInput-${completedTask.id}" type="text" placeholder="Edit task..." class="input input-sm hidden" value="${completedTask.text}" />
+          <div id="task-text-${completedTask.id}" class="">${completedTask.text}</div>
+        </div>
+      </li>
+    `
+    completedContainer.insertAdjacentHTML("beforeend", completedTaskItem)
+  })
+}
+
+const displayNotes = (notes) => {
+  notesContainer.innerHTML = "" // clear exisiting notes
+
+  notes.forEach((note, index) => {
+    const noteItem = `
+      <li id="${note.id}" class="list-row">
+        <div id="note-id" class="text-4xl font-thin opacity-30 tabular-nums">${index + 1}</div>
+        <div class="flex items-center">
+          <div id="note-title-${note.id}" class="text-lg uppercase opacity-80">${note.title}</div>
+        </div>
+        <p id="note-text-${note.id}" class="list-col-wrap text-sm">
+          ${note.text}
+        </p>
+        <textarea id="edit-note-textarea-${note.id}" class="textarea list-col-wrap  bg-neutral w-full h-36 hidden" value="${note.text}">${note.text}</textarea>
+        <button onclick="handleEditNote('${note.id}')" class="btn btn-square btn-ghost">
+          ${editIcon}
+        </button>
+        <button onclick="handleDeleteNote('${note.id}')" class="btn btn-square btn-ghost">
+          ${deleteIcon}
+        </button>
+      </li>
+    `
+    notesContainer.insertAdjacentHTML("beforeend", noteItem)
+  })
+}
+
+searchbox.addEventListener("input", dynamicSearchFilter)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//! PRIORITY LIST TABS FOR EACH DIFFERENT PRIORITY LEVEL
+
+//* BUILD URGENT PRIORITY TASK LIST
+const buildUrgentListHTML = () => {
+  // Filter for only "Urgent" tasks:
+  let onlyUrgentTasks = tasks.filter((task) => task.priority === "Urgent");
+  urgentTasksContainer.innerHTML = ""
+  if (onlyUrgentTasks.length > 0) {
+    onlyUrgentTasks.forEach((task, index) => {
+      // Add to HTML
+      urgentTasksContainer.insertAdjacentHTML("beforeend", buildTodoList(task, index))
+      })
+  }
+}
+buildUrgentListHTML()
+
+
+//* BUILD HIGH PRIORITY TASK LIST
+const buildHighListHTML = () => {
+  // Filter for only "High" tasks:
+  let onlyHighTasks = tasks.filter((task) => task.priority === "High");
+  highTasksContainer.innerHTML = ""
+  if (onlyHighTasks.length > 0) {
+    onlyHighTasks.forEach((task, index) => {
+      // Add to HTML
+      highTasksContainer.insertAdjacentHTML("beforeend", buildTodoList(task, index))
+      })
+  }
+}
+buildHighListHTML()
+
+
+//* BUILD NORMAL PRIORITY TASK LIST
+const buildNormalListHTML = () => {
+  // Filter for only "Normal" tasks:
+  let onlyNormalTasks = tasks.filter((task) => task.priority === "Normal");
+  normalTasksContainer.innerHTML = ""
+  if (onlyNormalTasks.length > 0) {
+    onlyNormalTasks.forEach((task, index) => {
+      // Add to HTML
+      normalTasksContainer.insertAdjacentHTML("beforeend", buildTodoList(task, index))
+      })
+  }
+}
+buildNormalListHTML()
+
+
+//* BUILD LOW PRIORITY TASK LIST
+const buildLowListHTML = () => {
+  // Filter for only "Low" tasks:
+  let onlyLowTasks = tasks.filter((task) => task.priority === "Low");
+  lowTasksContainer.innerHTML = ""
+  if (onlyLowTasks.length > 0) {
+    onlyLowTasks.forEach((task, index) => {
+      // Add to HTML
+      lowTasksContainer.insertAdjacentHTML("beforeend", buildTodoList(task, index))
+      })
+  }
+}
+buildLowListHTML()
+
+
+
+
+
+
+
+
+
+
+//! ALL FUNCTIONS FOR BUILDING HTML OF LISTS FOR TASKS!
+const buildAllTaskHTMLFunctions = () => {
+    buildTodoListHTML()
+    buildCompletedListHTML()
+    buildUrgentListHTML()
+    buildHighListHTML()
+    buildNormalListHTML()
+    buildLowListHTML()
+}
+
+
+
+
+
+
 
 //! SCHEMAS
 //* TASK SCHEMA
