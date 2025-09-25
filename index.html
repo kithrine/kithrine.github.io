@@ -21,19 +21,20 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,100,0,0&icon_names=list_alt" />
     <link
     rel="stylesheet"
-    href="https://fonts.googleapis.com/css?family=Syncopate|Rubik"
+    href="https://fonts.googleapis.com/css?family=Syncopate|Rubik|Titan One|Rubik Bubbles|Chewy|Wendy One|Sue Ellen Francisco|Nanum Pen Script|Delicious Handrawn"
     />
     <link rel="stylesheet" type="text/css" href="index.css" />
-  <title>Todo Javascript DaisyUI</title>
+  <title>Cookie: Todo & Notes</title>
 </head>
 
-<body data-theme="coffee" class="min-h-screen bg-autumn">
+<body data-theme="coffee" class="min-h-screen bg-autumn rubik">
   <div class="navbar bg-base-100 shadow-sm">
     <div class="flex-1">
-      <a class="btn btn-ghost text-xl">Daisy To Do</a>
+      <div class="text-xl titan-one leading-4">Cookie</div>
+      <p class="delicious-handrawn text-xs pl-2">To Do & Notes</p>
     </div>
     <div class="flex gap-2">
-      <input id="searchbox" type="text" placeholder="Search" class="input input-bordered w-24 md:w-auto" />
+      <input id="searchbox" type="text" placeholder="Search" class="input input-bordered min-w-[20vw] md:w-auto" />
       <div class="dropdown dropdown-end">
         <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
           <div class="w-10 rounded-full">
@@ -58,19 +59,23 @@
     </div>
   </div>
 
+<div class=" px-28 py-16">
+  <div class="text-center pb-4">
+    <div class="text-6xl titan-one leading-12">Cookie</div>
+    <p class="delicious-handrawn text-2xl pl-2">To Do & Notes</p>
+  </div>
 
-  <!-- name of each tab group should be unique -->
-<div class="tabs tabs-lift px-28 py-16">
+<div class="tabs tabs-lift">
   <label class="tab">
     <input type="radio" name="todo-list-tabs" checked="checked" />
-    <span class="material-symbols-outlined me-2 opacity-80">
+    <span class="material-symbols-outlined me-1 opacity-80">
       list_alt
       </span>
     To Do List
   </label>
   <div class="tab-content bg-base-100 border-base-300 p-6">
     <fieldset class="fieldset">
-      <legend class="fieldset-legend">Add a new task:</legend>
+      <legend class="fieldset-legend tracking-wider uppercase text-sm">Add a new task:</legend>
       <div class="flex gap-x-4">
         <input id="add-task-text" type="text" class="input bg-neutral w-[65%]" placeholder="What to do..." />
         <label class="select bg-neutral">
@@ -83,35 +88,35 @@
             <option value="Urgent" class="bg-error text-neutral hover:text-neutral-content">Urgent</option>
           </select>
         </label>
-        <button onclick="handleAddTask()" id="add-task-button" class="btn btn-dash btn-primary" disabled>Add Task</button>
+        <button onclick="handleAddTask()" id="add-task-button" class="btn btn-outline" disabled>Add Task</button>
         <button onclick="handleCancelTask()" class="btn btn-soft btn-warning">Cancel</button>
       </div>
     </fieldset>
 
-    <div class="p-4 pb-2 text-sm tracking-wide uppercase mt-8">Tasks</div>
+    <div class="p-4 pb-2 text-2xl tracking-wider uppercase mt-2 sue-ellen font-bold">Tasks</div>
     <ul id="todo-list-container" class="list bg-base-200 rounded-box shadow-md overflow-y-auto max-h-[70vh]">
     </ul>
   </div>
 
   <label class="tab">
     <input type="radio" name="todo-list-tabs" />
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 me-2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 0 1-6.364 0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z" /></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 me-1"><path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 0 1-6.364 0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z" /></svg>
     <!-- Completed Tasks -->
      Completed
   </label>
   <div class="tab-content bg-base-100 border-base-300 p-6">
-    <div class="p-4 pb-2 text-sm tracking-wide uppercase">Completed Tasks</div>
+    <div class="p-4 pb-2 text-2xl tracking-wider uppercase mt-2 sue-ellen font-bold">Completed Tasks</div>
     <ul id="completed-tasks-container" class="list bg-base-200 rounded-box shadow-md overflow-y-auto max-h-[80vh]">
     </ul>
   </div>
 
   <label class="tab">
     <input type="radio" name="todo-list-tabs" />
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 me-2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 me-1"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>
     Notes
   </label>
   <div class="tab-content bg-base-100 border-base-300 p-6">
-    <div class="p-4 pb-2 text-sm tracking-wide uppercase">Add a new note:</div>
+    <div class="py-2 text-sm tracking-wider uppercase font-bold">Add a new note:</div>
     <label class="floating-label">
       <input id="add-note-title" type="text" placeholder="Title" class="input input-md bg-neutral" />
       <span class="text-xl">Title</span>
@@ -123,54 +128,74 @@
         <span>Note</span>
       </label>
     </div>
-    <div class="pt-3">
-      <button onclick="handleAddNote()" id="add-note-button" class="btn btn-dash btn-base-content" disabled>Add Note</button>
+    <div class="pt-3 flex gap-x-4">
+      <button onclick="handleAddNote()" id="add-note-button" class="btn btn-outline" disabled>Add Note</button>
       <button onclick="handleCancelNote()" class="btn btn-soft btn-warning">Cancel</button>
     </div>
-    <div class="p-4 pb-2 text-sm tracking-wide uppercase mt-8">Notes</div>
+    <div class="p-4 pb-2 text-2xl tracking-wider uppercase mt-2 sue-ellen font-bold">Notes</div>
     <ul id="notes-container" class="list bg-base-200 rounded-box shadow-md overflow-y-auto max-h-[80vh]">
     </ul>
   </div>
 
-  <label class="tab">
+  <label class="tab opacity-80 hover:opacity-100">
     <input type="radio" name="todo-list-tabs" />
+    <span class="text-error flex items-center">
+    <span class="me-1"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-diamond" viewBox="0 0 16 16">
+      <path d="M6.95.435c.58-.58 1.52-.58 2.1 0l6.515 6.516c.58.58.58 1.519 0 2.098L9.05 15.565c-.58.58-1.519.58-2.098 0L.435 9.05a1.48 1.48 0 0 1 0-2.098zm1.4.7a.495.495 0 0 0-.7 0L1.134 7.65a.495.495 0 0 0 0 .7l6.516 6.516a.495.495 0 0 0 .7 0l6.516-6.516a.495.495 0 0 0 0-.7L8.35 1.134z"/>
+      <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/>
+    </svg></span>
     Urgent
+  </span>
   </label>
   <div class="tab-content bg-base-100 border-base-300 p-6">
-    <div class="p-4 pb-2 text-sm tracking-wide uppercase">Urgent Priority Tasks</div>
+    <div class="p-4 pb-2 text-2xl tracking-wider uppercase mt-2 sue-ellen font-bold">Urgent Priority Tasks</div>
     <ul id="urgent-tasks-container" class="list bg-base-200 rounded-box shadow-md overflow-y-auto max-h-[70vh]">
     </ul>
   </div>
 
-  <label class="tab">
+  <label class="tab opacity-80 hover:opacity-100">
     <input type="radio" name="todo-list-tabs" />
+    <span class="text-warning flex items-center">
+    <span class="me-1"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-lg" viewBox="0 0 16 16">
+      <path d="M7.005 3.1a1 1 0 1 1 1.99 0l-.388 6.35a.61.61 0 0 1-1.214 0zM7 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0"/>
+    </svg></span>
     High
+  </span>
   </label>
   <div class="tab-content bg-base-100 border-base-300 p-6">
-    <div class="p-4 pb-2 text-sm tracking-wide uppercase">High Priority Tasks</div>
+    <div class="p-4 pb-2 text-2xl tracking-wider uppercase mt-2 sue-ellen font-bold">High Priority Tasks</div>
     <ul id="high-tasks-container" class="list bg-base-200 rounded-box shadow-md overflow-y-auto max-h-[70vh]">
     </ul>
   </div>
 
-  <label class="tab">
+  <label class="tab opacity-80 hover:opacity-100">
     <input type="radio" name="todo-list-tabs" />
+    <span class="text-success flex items-center">
+    <span class="me-1"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m331-668 102-137q8.8-11.87 20.9-17.44Q466-828 480-828q14 0 26.1 5.56 12.1 5.57 20.9 17.44l102 137 158 54q20 7 30.5 22.66t10.5 34.6q0 8.74-2.57 17.31-2.56 8.57-8.43 16.43L713-384l4 150q1 26.14-17.35 44.07T657-172q1 0-17-2l-160-48-160 48q-5 2-9.24 2H303q-25 0-43-17.93T243-234l4-151-104-138q-5.87-7.96-8.43-16.64Q132-548.32 132-557q0-18.83 11.07-35.03Q154.15-608.22 174-615l157-53Zm18 24-165 56q-15 5-20.5 20.5T168-539l108 146-5 159q-1 17 12 27t29 5l168-49 168 50q16 5 29-5t12-27l-5-160 108-144q10-13 4.5-28.5T776-586l-165-58-106-142q-9-13-25-13t-25 13L349-644Zm131 145Z"/></svg></span>
     Normal
+    </span>
   </label>
   <div class="tab-content bg-base-100 border-base-300 p-6">
-    <div class="p-4 pb-2 text-sm tracking-wide uppercase">Normal Priority Tasks</div>
+    <div class="p-4 pb-2 text-2xl tracking-wider uppercase mt-2 sue-ellen font-bold">Normal Priority Tasks</div>
     <ul id="normal-tasks-container" class="list bg-base-200 rounded-box shadow-md overflow-y-auto max-h-[70vh]">
     </ul>
   </div>
 
-  <label class="tab">
+  <label class="tab opacity-80 hover:opacity-100">
     <input type="radio" name="todo-list-tabs" />
+    <span class="text-info flex items-center">
+    <span class="material-symbols-outlined me-1 opacity-80">
+      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M392-342h176v-28H428l140-180v-28H392v28h140L392-370v28ZM212-212v-28h60v-328q0-77 49.5-135T446-774v-20q0-14.17 9.88-24.08 9.88-9.92 24-9.92t24.12 9.92q10 9.91 10 24.08v20q75 13 124.5 71T688-568v328h60v28H212Zm268-282Zm-.18 382q-24.82 0-42.32-17.63Q420-147.25 420-172h120q0 25-17.68 42.5-17.67 17.5-42.5 17.5ZM300-240h360v-328q0-75-52.5-127.5T480-748q-75 0-127.5 52.5T300-568v328Z"/></svg>
+      </span>
     Low
+    </span>
   </label>
   <div class="tab-content bg-base-100 border-base-300 p-6">
-    <div class="p-4 pb-2 text-sm tracking-wide uppercase">Low Priority Tasks</div>
+    <div class="p-4 pb-2 text-2xl tracking-wider uppercase mt-2 sue-ellen font-bold">Low Priority Tasks</div>
     <ul id="low-tasks-container" class="list bg-base-200 rounded-box shadow-md overflow-y-auto max-h-[70vh]">
     </ul>
   </div>
+</div>
 
 </div>
   <script src="index.js" type="text/javascript"></script>
