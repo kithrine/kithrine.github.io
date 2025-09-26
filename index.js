@@ -264,7 +264,7 @@ const buildNotesList = (note, index) => {
         <p id="note-text-${note.id}" class="list-col-wrap text-sm">
           ${note.text}
         </p>
-        <textarea id="edit-note-textarea-${note.id}" class="textarea list-col-wrap  bg-neutral w-full h-36 hidden" value="${note.text}">${note.text}</textarea>
+        <textarea id="edit-note-textarea-${note.id}" class="textarea list-col-wrap w-full h-36 hidden" value="${note.text}">${note.text}</textarea>
         <button onclick="handleEditNote('${note.id}')" class="btn btn-square btn-ghost">
           ${editIcon}
         </button>
@@ -331,6 +331,10 @@ const handleEditNote = (id) => {
     noteText.classList.remove("hidden")
     buildNotesListHTML()
   }
+  // if (currentTheme === "nord") {
+  //   editNoteTextarea.classList.remove("bg-neutral")
+  //   editNoteTextarea.classList.add("bg-base-200")
+  // }
 }
 
 //* DELETE/REMOVE NOTE (ARCHIVE)
@@ -345,6 +349,7 @@ const handleDeleteNote = (id) => {
 
 //* CLEAR OUT ADD NOTE INPUT
 const handleCancelNote = () => {
+  addNoteTitle.value = ""
   addNoteText.value = ""
   addNoteButton.setAttribute("disabled", "")
 }
@@ -602,6 +607,139 @@ const buildAllTaskHTMLFunctions = () => {
     buildLowListHTML()
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//! THEME TOGGLE
+const theme = JSON.parse(localStorage.getItem("theme"))
+const themeToggle = document.getElementById("theme-toggle")
+const bodyBackground = document.getElementById("body-background")
+const selectPriorityBackground = document.getElementById("select-priority-bg")
+const priorityLow = document.getElementById("priority-low")
+const priorityNormal = document.getElementById("priority-normal")
+const priorityHigh = document.getElementById("priority-high")
+const priorityUrgent = document.getElementById("priority-urgent")
+const cancelTaskText = document.getElementById("cancel-task-text")
+const cancelNoteText = document.getElementById("cancel-note-text")
+
+
+//* ADDING/REMOVING CLASSES DEPENDING ON THE THEME
+const addRemoveClassesForThemeCoffee = () => {
+  // Remove classes from the nord theme
+  bodyBackground.classList.remove("nord-bg-autumn")
+  addTaskText.classList.remove("bg-base-200")
+  selectPriorityBackground.classList.remove("bg-base-200")
+  priorityLow.classList.remove("hover:text-neutral-content")
+  priorityNormal.classList.remove("hover:text-neutral-content")
+  priorityHigh.classList.remove("hover:text-neutral-content")
+  priorityUrgent.classList.remove("hover:text-neutral-content")
+  addNoteTitle.classList.remove("bg-base-200")
+  addNoteText.classList.remove("bg-base-200")
+  // Add classes to the coffee theme
+  bodyBackground.classList.add("coffee-bg-autumn")
+  addTaskText.classList.add("bg-neutral")
+  selectPriorityBackground.classList.add("bg-neutral")
+  priorityLow.classList.add("hover:text-neutral-content")
+  priorityNormal.classList.add("hover:text-neutral-content")
+  priorityHigh.classList.add("hover:text-neutral-content")
+  priorityUrgent.classList.add("hover:text-neutral-content")
+  cancelTaskText.classList.add("btn-soft")
+  addNoteTitle.classList.add("bg-neutral")
+  addNoteText.classList.add("bg-neutral")
+  cancelNoteText.classList.add("btn-soft")
+}
+
+const addRemoveClassesForThemeNord = () => {
+  // Remove classes from the coffee theme
+  bodyBackground.classList.remove("coffee-bg-autumn")
+  addTaskText.classList.remove("bg-neutral")
+  selectPriorityBackground.classList.remove("bg-neutral")
+  priorityLow.classList.remove("hover:text-neutral-content")
+  priorityNormal.classList.remove("hover:text-neutral-content")
+  priorityHigh.classList.remove("hover:text-neutral-content")
+  priorityUrgent.classList.remove("hover:text-neutral-content")
+  cancelTaskText.classList.remove("btn-soft")
+  addNoteTitle.classList.remove("bg-neutral")
+  addNoteText.classList.remove("bg-neutral")
+  cancelNoteText.classList.remove("btn-soft")
+  // Add classes to the nord theme
+  bodyBackground.classList.add("nord-bg-autumn")
+  addTaskText.classList.add("bg-base-200")
+  selectPriorityBackground.classList.add("bg-base-200")
+  addNoteTitle.classList.add("bg-base-200")
+  addNoteText.classList.add("bg-base-200")
+}
+
+// On page load, set theme from local storage || default
+console.log("theme", theme)
+let currentTheme = theme || "coffee"
+if (currentTheme === "nord") {
+  currentTheme = "nord"
+  themeChecked = true
+  addRemoveClassesForThemeNord()
+} else {
+  currentTheme = "coffee"
+  themeChecked = false
+  addRemoveClassesForThemeCoffee()
+}
+// currentTheme = currentTheme === "nord" ? "coffee" : "nord"
+localStorage.setItem("theme", JSON.stringify(currentTheme))
+document.body.setAttribute("data-theme", currentTheme)
+themeToggle.value = currentTheme
+themeToggle.checked = themeChecked
+
+themeToggle.addEventListener("click", () => {
+  console.log("currentTheme", currentTheme)
+  let themeChecked = false
+  if (currentTheme === "nord") {
+    currentTheme = "coffee"
+    themeChecked = false
+    addRemoveClassesForThemeCoffee()
+  } else {
+    currentTheme = "nord"
+    themeChecked = true
+    addRemoveClassesForThemeNord()
+  }
+  // currentTheme = currentTheme === "nord" ? "coffee" : "nord"
+  localStorage.setItem("theme", JSON.stringify(currentTheme))
+  document.body.setAttribute("data-theme", currentTheme)
+  themeToggle.value = currentTheme
+  themeToggle.checked = themeChecked
+})
+
+// let currentTheme = "coffee"
+// const handleThemeToggle = () => {
+//   console.log("currentTheme", currentTheme)
+//   if (currentTheme === "coffee") {
+//     currentTheme = "nord"
+//     localStorage.setItem("theme", JSON.stringify(currentTheme))
+//   htmlElement.setAttribute("data-theme", "nord")
+    
+//   } else {
+//     currentTheme = "coffee"
+//     localStorage.setItem("theme", JSON.stringify(currentTheme))
+//   htmlElement.setAttribute("data-theme", "coffee")
+
+//   }
+// }
+
+// if (theme === "nord") {
+//   htmlElement.setAttribute("data-theme", "nord")
+// } else {
+//   htmlElement.setAttribute("data-theme", "coffee")
+
+// }
 
 
 
