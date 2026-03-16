@@ -3,21 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link
-      href="https://cdn.jsdelivr.net/npm/daisyui@5"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link
-      href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-    />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,100,0,0&icon_names=list_alt" />
     <link
     rel="stylesheet"
@@ -28,42 +13,43 @@
 </head>
 
 <body id="body-background" class="coffee-bg-autumn rubik cookie-font-color">
+  <!-- simple navbar (native css) -->
   <!-- <div class="cookie-navbar">
-    <div class="flex-1">
-      <div class="titan-one leading-4">Cookie</div>
-      <p class="delicious-handrawn pl-2">To Do List</p>
+    <div>
+      <div class="titan-one">Cookie</div>
+      <p class="delicious-handrawn">To Do List</p>
     </div>
-    <div class="flex gap-2">
-      <input id="searchbox" type="text" placeholder="Search tasks & notes!" class="input input-bordered min-w-[20vw] md:w-auto" />
+    <div>
+      <input id="searchbox" type="text" placeholder="Search tasks & notes!" class="themed-input" />
     </div>
   </div> -->
 
 <div class="list-margins">
-  <div class="text-center pb-4">
-    <div class="cookie-title titan-one leading-12">Cookie</div>
+  <div class="header">
+    <div class="cookie-title titan-one">Cookie</div>
     <p class="cookie-subtitle delicious-handrawn">To Do List</p>
   </div>
 
 
-  <div class="list-container p-6">
+  <div class="list-container">
     <fieldset class="add-task-inputs">
       <legend class="fieldset-legend tracking-wider uppercase text-sm cookie-font-color">Add a new task:</legend>
-        <input id="add-task-text" type="text" class="input w-[65%]" placeholder="What to do..." />
-        <label id="select-priority-bg" class="select">
-          <span class="label opacity-">Priority Level</span>
-          <select id="add-task-priority" class="">
-            <option id="priority-low" value="Low" class="bg-info text-neutral hover:text-neutral-content">Low</option>
-            <option id="priority-normal" value="Normal" class="bg-success text-neutral hover:text-neutral-content" selected>Normal</option>
-            <option id="priority-high" value="High" class="bg-warning text-neutral hover:text-neutral-content">High</option>
-            <option id="priority-urgent" value="Urgent" class="bg-error text-neutral hover:text-neutral-content">Urgent</option>
-          </select>
-        </label>
-        <button onclick="handleAddTask()" id="add-task-button" class="btn btn-outline" disabled>Add Task</button>
-        <button onclick="handleCancelTask()" id="cancel-task-text" class="btn btn-soft btn-warning">Cancel</button>
+            <input id="add-task-text" type="text" class="themed-input" placeholder="What to do..." />
+            <label id="select-priority-bg">
+              <span class="label">Priority Level</span>
+              <select id="add-task-priority" class="themed-select">
+                <option id="priority-low" value="Low">Low</option>
+                <option id="priority-normal" value="Normal" selected>Normal</option>
+                <option id="priority-high" value="High">High</option>
+                <option id="priority-urgent" value="Urgent">Urgent</option>
+              </select>
+            </label>
+            <button onclick="handleAddTask()" id="add-task-button" class="themed-button" disabled>Add Task</button>
+            <button onclick="handleCancelTask()" id="cancel-task-text" class="themed-button">Cancel</button>
     </fieldset>
 
-    <div class="p-4 pb-2 text-2xl tracking-wider uppercase mt-2 sue-ellen font-bold">Tasks</div>
-    <ul id="todo-list-container" class="list bg-med rounded-box shadow-md overflow-y-auto max-h-[70vh]">
+    <div class="section-heading">Tasks</div>
+    <ul id="todo-list-container" class="todo-list">
     </ul>
   </div>
 </div>

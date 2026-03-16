@@ -1,3 +1,14 @@
+/* CUSTOM REUSASBLE THEMES */
+:root {
+  --bg-light: #261B25;
+  --bg-med: #1E151D;
+  --bg-dark: #120C12;
+  --accent: #C59F61;
+  --control-bg: rgba(255,255,255,0.03);
+  --control-border: rgba(197,159,97,0.12);
+  --placeholder: rgba(197,159,97,0.45);
+}
+
 /* Coffee Theme Background Autumn */
 .coffee-bg-autumn {
   background-color: #261b25;
@@ -59,6 +70,10 @@
   margin-top: 1.5rem;
 }
 
+.list-container {
+  padding: 1.25rem;
+}
+
 .add-task-inputs {
   display: flex;
   flex-direction: column;
@@ -86,6 +101,25 @@
   margin: 2rem;
 }
 
+.header { padding-bottom: 1rem; }
+.section-heading {
+  padding: 0.75rem 0.25rem;
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 1rem;
+  text-align: left;
+}
+
+.fieldset-legend {
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+label { display: flex; align-items: center; gap: 0.5rem; }
+
+.task-actions { display:flex; gap:0.5rem; align-items:center; }
+
 .task-list {
   border-radius: var(--radius-box);
   word-break: break-word;
@@ -98,6 +132,123 @@
   position: relative;
   background-color: var(--bg-med);
 }
+
+/* Layout helpers for add-task inputs */
+.add-task-inputs > * {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* Themed form controls (native CSS) */
+:root {
+  --bg-light: #261B25;
+  --bg-med: #1E151D;
+  --bg-dark: #120C12;
+  --accent: #C59F61;
+  --control-bg: rgba(255,255,255,0.02);
+  --control-border: rgba(197,159,97,0.12);
+  --placeholder: rgba(197,159,97,0.45);
+}
+
+.themed-input,
+.themed-textarea,
+.themed-select {
+  background-color: var(--control-bg);
+  color: var(--accent);
+  border: 1px solid var(--control-border);
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  outline: none;
+  transition: box-shadow .15s ease, border-color .12s ease;
+  font-family: inherit;
+}
+
+.themed-textarea { min-height: 3rem; resize: vertical; }
+
+.themed-input::placeholder,
+.themed-textarea::placeholder { color: var(--placeholder); }
+
+.themed-input:focus,
+.themed-textarea:focus,
+.themed-select:focus {
+  box-shadow: 0 0 0 4px rgba(197,159,97,0.06);
+  border-color: rgba(197,159,97,0.45);
+}
+
+.themed-button {
+  background-color: transparent;
+  color: var(--accent);
+  border: 1px solid rgba(197,159,97,0.12);
+  padding: 0.45rem 0.85rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color .12s ease, transform .06s ease;
+}
+
+.themed-button:hover { background-color: rgba(197,159,97,0.06); transform: translateY(-1px); }
+
+.themed-button[disabled], .themed-button[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Task list styles */
+.todo-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem;
+  background: linear-gradient(180deg, rgba(0,0,0,0.02), transparent);
+  border-radius: 12px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.task-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.02);
+}
+
+.task-row:last-child { border-bottom: none; }
+
+.task-index {
+  font-size: 1.75rem;
+  opacity: 0.25;
+  width: 2ch;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.task-content { flex: 1 1 auto; }
+
+.task-text { color: var(--accent); }
+
+.priority-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+.priority-low { background:#7dd3fc; color:#04263a; }
+.priority-normal { background:#86efac; color:#052008; }
+.priority-high { background:#fde68a; color:#4a2f02; }
+.priority-urgent { background:#fb7185; color:#3a0a0f; }
+
+.icon-button {
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  padding: 0.35rem;
+}
+
+.icon-button svg { display:block; }
+
+/* Small helpers for hidden class used in JS */
+.hidden { display:none !important; }
 
 .hidden {
   display: none;
@@ -141,66 +292,3 @@
 .syncopate {
   font-family: "Syncopate";
 }
-
-/* Themed form controls (native CSS) */
-:root {
-  --bg-light: #261B25;
-  --bg-med: #1E151D;
-  --bg-dark: #120C12;
-  --accent: #C59F61;
-  --control-bg: rgba(255,255,255,0.03);
-  --control-border: rgba(197,159,97,0.12);
-  --placeholder: rgba(197,159,97,0.45);
-}
-
-/* Make inputs grow nicely inside your existing `.add-task-inputs` flex container */
-/* .add-task-inputs > * {
-  flex: 1 1 0;
-  min-width: 0;
-} */
-
-/* .themed-input,
-.themed-textarea,
-.themed-select {
-  background-color: var(--control-bg);
-  color: var(--accent);
-  border: 1px solid var(--control-border);
-  padding: 0.6rem 0.75rem;
-  border-radius: 8px;
-  outline: none;
-  transition: box-shadow .15s ease, border-color .12s ease;
-  font-family: inherit;
-}
-
-.themed-textarea { min-height: 3rem; resize: vertical; }
-
-.themed-input::placeholder,
-.themed-textarea::placeholder { color: var(--placeholder); }
-
-.themed-input:focus,
-.themed-textarea:focus,
-.themed-select:focus {
-  box-shadow: 0 0 0 4px rgba(197,159,97,0.08);
-  border-color: rgba(197,159,97,0.45);
-}
-
-.themed-button {
-  background-color: transparent;
-  color: var(--accent);
-  border: 1px solid var(--accent);
-  padding: 0.45rem 0.85rem;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background-color .12s ease, transform .06s ease;
-}
-
-.themed-button:hover { background-color: rgba(197,159,97,0.08); transform: translateY(-1px); } */
-
-/* Accessibility: ensure focus is visible for keyboard users */
-/* .themed-input:focus-visible,
-.themed-textarea:focus-visible,
-.themed-select:focus-visible,
-.themed-button:focus-visible {
-  outline: 2px solid rgba(197,159,97,0.18);
-  outline-offset: 2px;
-} */

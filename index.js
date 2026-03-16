@@ -4,22 +4,9 @@ const addTaskText = document.getElementById("add-task-text")
 const todoListContainer = document.getElementById("todo-list-container")
 const taskPriorityBadge = document.getElementById("task-priority-badge")
 const addTaskPriority = document.getElementById("add-task-priority")
-const completedContainer = document.getElementById("completed-tasks-container")
-const notesContainer = document.getElementById("notes-container")
-const addNoteButton = document.getElementById("add-note-button")
-const addNoteTitle = document.getElementById("add-note-title")
-const addNoteText = document.getElementById("add-note-text")
-const urgentTasksContainer = document.getElementById("urgent-tasks-container")
-const highTasksContainer = document.getElementById("high-tasks-container")
-const normalTasksContainer = document.getElementById("normal-tasks-container")
-const lowTasksContainer = document.getElementById("low-tasks-container")
-
 
 //* INITIALIZE TASK DATA AND GRAB ANY CURRENT TASKS SAVED IN LOCAL STORAGE
 const tasks = JSON.parse(localStorage.getItem("tasks")) || []
-const completedTasks = JSON.parse(localStorage.getItem("completedTasks")) || []
-const notes = JSON.parse(localStorage.getItem("notes")) || []
-
 
 //* SVG ICONS
 const editIcon = `<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="currentColor" viewBox="0 0 640 640"><path d="M100.4 417.2C104.5 402.6 112.2 389.3 123 378.5L304.2 197.3L338.1 163.4C354.7 180 389.4 214.7 442.1 267.4L476 301.3L442.1 335.2L260.9 516.4C250.2 527.1 236.8 534.9 222.2 539L94.4 574.6C86.1 576.9 77.1 574.6 71 568.4C64.9 562.2 62.6 553.3 64.9 545L100.4 417.2zM156 413.5C151.6 418.2 148.4 423.9 146.7 430.1L122.6 517L209.5 492.9C215.9 491.1 221.7 487.8 226.5 483.2L155.9 413.5zM510 267.4C493.4 250.8 458.7 216.1 406 163.4L372 129.5C398.5 103 413.4 88.1 416.9 84.6C430.4 71 448.8 63.4 468 63.4C487.2 63.4 505.6 71 519.1 84.6L554.8 120.3C568.4 133.9 576 152.3 576 171.4C576 190.5 568.4 209 554.8 222.5C551.3 226 536.4 240.9 509.9 267.4z"/></svg>`
@@ -35,34 +22,30 @@ const buildTodoList = (task, index) => {
   // console.log("buildTodoList task", task)
   // console.log("task.status", task.status)
   // console.log("task.priority", task.priority)
-  const badgeColors = task.priority === "Low" ? "badge-info" : task.priority === "Normal" ? "badge-success" : task.priority === "High" ? "badge-warning" : task.priority === "Urgent" ? "badge-error" : "badge-neutral"
+  const badgeColors = task.priority === "Low" ? "priority-low" : task.priority === "Normal" ? "priority-normal" : task.priority === "High" ? "priority-high" : task.priority === "Urgent" ? "priority-urgent" : "priority-neutral"
  
   return `
-      <li id="${task.id}" class="list-row pb-1">
-        <div id="task-id" class="text-4xl font-thin opacity-30 tabular-nums">${index + 1}</div>
-        <div class="list-col-grow">
+      <li id="${task.id}" class="task-row">
+        <div id="task-id" class="task-index">${index + 1}</div>
+        <div class="task-content">
           <div>
-            <select id="edit-priority-dropdown-${task.id}" class="badge badge-neutral border-base-content/50 hidden">
-              <option disabled selected value="${task.priority}" class="bg-base-200">${task.priority}</option>
-              <option value="Low" class="bg-info text-neutral hover:text-neutral-content">Low</option>
-              <option value="Normal" class="bg-success text-neutral hover:text-neutral-content">Normal</option>
-              <option value="High" class="bg-warning text-neutral hover:text-neutral-content">High</option>
-              <option value="Urgent" class="bg-error text-neutral hover:text-neutral-content">Urgent</option>
+            <select id="edit-priority-dropdown-${task.id}" class="edit-priority-select hidden">
+              <option disabled selected value="${task.priority}">${task.priority}</option>
+              <option value="Low">Low</option>
+              <option value="Normal">Normal</option>
+              <option value="High">High</option>
+              <option value="Urgent">Urgent</option>
             </select>
-            <div id="task-priority-badge-${task.id}" class="badge ${badgeColors}">${task.priority}</div>
+            <div id="task-priority-badge-${task.id}" class="priority-badge priority-${task.priority}">${task.priority}</div>
           </div>
-            <input id="editInput-${task.id}" type="text" placeholder="Edit task..." class="input input-sm hidden mt-1 text-base mb-1" value="${task.text}" />
-            <div id="task-text-${task.id}" class="pt-2 pb-1.5 text-base">${task.text}</div>
+            <input id="editInput-${task.id}" type="text" placeholder="Edit task..." class="edit-input hidden" value="${task.text}" />
+            <div id="task-text-${task.id}" class="task-text">${task.text}</div>
           </div>
-          <button onclick="handleEditTask('${task.id}')" class="btn btn-square btn-ghost">
-           ${editIcon}
-          </button>
-          <button onclick="handleCompleteTask('${task.id}')" class="btn btn-square btn-ghost">
-            ${checkmarkIcon}
-          </button>
-      <button onclick="handleDeleteTask('${task.id}')" class="btn btn-square btn-ghost">
-        ${deleteIcon}
-      </button>
+          <div class="task-actions">
+          <button onclick="handleEditTask('${task.id}')" class="icon-button" aria-label="edit">${editIcon}</button>
+          <button onclick="handleCompleteTask('${task.id}')" class="icon-button" aria-label="complete">${checkmarkIcon}</button>
+          <button onclick="handleDeleteTask('${task.id}')" class="icon-button" aria-label="delete">${deleteIcon}</button>
+          </div>
         </li>
       `
 }
@@ -215,16 +198,15 @@ const buildCompletedList = (task, index) => {
   const badgeColors = task.priority === "Low" ? "badge-info" : task.priority === "Normal" ? "badge-success" : task.priority === "High" ? "badge-warning" : task.priority === "Urgent" ? "badge-error" : "badge-neutral"
  
   return `
-      <li id="${task.id}" class="list-row">
-        <div id="task-id" class="text-4xl font-thin opacity-30 tabular-nums">${index + 1}</div>
-        <div class="list-col-grow">
+      <li id="${task.id}" class="task-row">
+        <div id="task-id" class="task-index">${index + 1}</div>
+        <div class="task-content">
           <div>
-            <div id="task-priority-badge" class="badge ${badgeColors}">${task.priority}</div>
+            <div id="task-priority-badge" class="priority-badge priority-${task.priority}">${task.priority}</div>
           </div>
-            <input id="editInput-${task.id}" type="text" placeholder="Edit task..." class="input input-sm hidden" value="${task.text}" />
-            <div id="task-text-${task.id}" class="">${task.text}</div>
+            <input id="editInput-${task.id}" type="text" placeholder="Edit task..." class="edit-input hidden" value="${task.text}" />
+            <div id="task-text-${task.id}" class="task-text">${task.text}</div>
           </div>
-          
         </li>
       `
 }
@@ -256,21 +238,17 @@ buildCompletedListHTML()
 //* BUILD NOTES LIST
 const buildNotesList = (note, index) => {
   return `
-    <li id="${note.id}" class="list-row">
-        <div id="note-id" class="text-4xl font-thin opacity-30 tabular-nums">${index + 1}</div>
-        <div class="flex items-center">
+    <li id="${note.id}" class="task-row">
+        <div id="note-id" class="task-index">${index + 1}</div>
+        <div class="task-content">
           <div id="note-title-${note.id}" class="text-lg uppercase opacity-80">${note.title}</div>
+          <p id="note-text-${note.id}" class="list-col-wrap text-sm">${note.text}</p>
+          <textarea id="edit-note-textarea-${note.id}" class="themed-textarea hidden">${note.text}</textarea>
         </div>
-        <p id="note-text-${note.id}" class="list-col-wrap text-sm">
-          ${note.text}
-        </p>
-        <textarea id="edit-note-textarea-${note.id}" class="textarea list-col-wrap w-full h-36 hidden" value="${note.text}">${note.text}</textarea>
-        <button onclick="handleEditNote('${note.id}')" class="btn btn-square btn-ghost">
-          ${editIcon}
-        </button>
-        <button onclick="handleDeleteNote('${note.id}')" class="btn btn-square btn-ghost">
-          ${deleteIcon}
-        </button>
+        <div class="task-actions">
+          <button onclick="handleEditNote('${note.id}')" class="icon-button">${editIcon}</button>
+          <button onclick="handleDeleteNote('${note.id}')" class="icon-button">${deleteIcon}</button>
+        </div>
       </li>
       `
 }
@@ -507,96 +485,6 @@ const displayNotes = (notes) => {
 searchbox.addEventListener("input", dynamicSearchFilter)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//! PRIORITY LIST TABS FOR EACH DIFFERENT PRIORITY LEVEL
-
-//* BUILD URGENT PRIORITY TASK LIST
-const buildUrgentListHTML = () => {
-  // Filter for only "Urgent" tasks:
-  let onlyUrgentTasks = tasks.filter((task) => task.priority === "Urgent");
-  urgentTasksContainer.innerHTML = ""
-  if (onlyUrgentTasks.length > 0) {
-    onlyUrgentTasks.forEach((task, index) => {
-      // Add to HTML
-      urgentTasksContainer.insertAdjacentHTML("beforeend", buildTodoList(task, index))
-      })
-  }
-}
-buildUrgentListHTML()
-
-
-//* BUILD HIGH PRIORITY TASK LIST
-const buildHighListHTML = () => {
-  // Filter for only "High" tasks:
-  let onlyHighTasks = tasks.filter((task) => task.priority === "High");
-  highTasksContainer.innerHTML = ""
-  if (onlyHighTasks.length > 0) {
-    onlyHighTasks.forEach((task, index) => {
-      // Add to HTML
-      highTasksContainer.insertAdjacentHTML("beforeend", buildTodoList(task, index))
-      })
-  }
-}
-buildHighListHTML()
-
-
-//* BUILD NORMAL PRIORITY TASK LIST
-const buildNormalListHTML = () => {
-  // Filter for only "Normal" tasks:
-  let onlyNormalTasks = tasks.filter((task) => task.priority === "Normal");
-  normalTasksContainer.innerHTML = ""
-  if (onlyNormalTasks.length > 0) {
-    onlyNormalTasks.forEach((task, index) => {
-      // Add to HTML
-      normalTasksContainer.insertAdjacentHTML("beforeend", buildTodoList(task, index))
-      })
-  }
-}
-buildNormalListHTML()
-
-
-//* BUILD LOW PRIORITY TASK LIST
-const buildLowListHTML = () => {
-  // Filter for only "Low" tasks:
-  let onlyLowTasks = tasks.filter((task) => task.priority === "Low");
-  lowTasksContainer.innerHTML = ""
-  if (onlyLowTasks.length > 0) {
-    onlyLowTasks.forEach((task, index) => {
-      // Add to HTML
-      lowTasksContainer.insertAdjacentHTML("beforeend", buildTodoList(task, index))
-      })
-  }
-}
-buildLowListHTML()
-
-
-
-
-
-
-
-
-
-
 //! ALL FUNCTIONS FOR BUILDING HTML OF LISTS FOR TASKS!
 const buildAllTaskHTMLFunctions = () => {
     buildTodoListHTML()
@@ -632,136 +520,3 @@ const priorityHigh = document.getElementById("priority-high")
 const priorityUrgent = document.getElementById("priority-urgent")
 const cancelTaskText = document.getElementById("cancel-task-text")
 const cancelNoteText = document.getElementById("cancel-note-text")
-
-
-//* ADDING/REMOVING CLASSES DEPENDING ON THE THEME
-const addRemoveClassesForThemeCoffee = () => {
-  // Remove classes from the nord theme
-  bodyBackground.classList.remove("nord-bg-autumn")
-  addTaskText.classList.remove("bg-base-200")
-  selectPriorityBackground.classList.remove("bg-base-200")
-  priorityLow.classList.remove("hover:text-neutral-content")
-  priorityNormal.classList.remove("hover:text-neutral-content")
-  priorityHigh.classList.remove("hover:text-neutral-content")
-  priorityUrgent.classList.remove("hover:text-neutral-content")
-  addNoteTitle.classList.remove("bg-base-200")
-  addNoteText.classList.remove("bg-base-200")
-  // Add classes to the coffee theme
-  bodyBackground.classList.add("coffee-bg-autumn")
-  addTaskText.classList.add("bg-neutral")
-  selectPriorityBackground.classList.add("bg-neutral")
-  priorityLow.classList.add("hover:text-neutral-content")
-  priorityNormal.classList.add("hover:text-neutral-content")
-  priorityHigh.classList.add("hover:text-neutral-content")
-  priorityUrgent.classList.add("hover:text-neutral-content")
-  cancelTaskText.classList.add("btn-soft")
-  addNoteTitle.classList.add("bg-neutral")
-  addNoteText.classList.add("bg-neutral")
-  cancelNoteText.classList.add("btn-soft")
-}
-
-const addRemoveClassesForThemeNord = () => {
-  // Remove classes from the coffee theme
-  bodyBackground.classList.remove("coffee-bg-autumn")
-  addTaskText.classList.remove("bg-neutral")
-  selectPriorityBackground.classList.remove("bg-neutral")
-  priorityLow.classList.remove("hover:text-neutral-content")
-  priorityNormal.classList.remove("hover:text-neutral-content")
-  priorityHigh.classList.remove("hover:text-neutral-content")
-  priorityUrgent.classList.remove("hover:text-neutral-content")
-  cancelTaskText.classList.remove("btn-soft")
-  addNoteTitle.classList.remove("bg-neutral")
-  addNoteText.classList.remove("bg-neutral")
-  cancelNoteText.classList.remove("btn-soft")
-  // Add classes to the nord theme
-  bodyBackground.classList.add("nord-bg-autumn")
-  addTaskText.classList.add("bg-base-200")
-  selectPriorityBackground.classList.add("bg-base-200")
-  addNoteTitle.classList.add("bg-base-200")
-  addNoteText.classList.add("bg-base-200")
-}
-
-// On page load, set theme from local storage || default
-console.log("theme", theme)
-let currentTheme = theme || "coffee"
-if (currentTheme === "nord") {
-  currentTheme = "nord"
-  themeChecked = true
-  addRemoveClassesForThemeNord()
-} else {
-  currentTheme = "coffee"
-  themeChecked = false
-  addRemoveClassesForThemeCoffee()
-}
-// currentTheme = currentTheme === "nord" ? "coffee" : "nord"
-localStorage.setItem("theme", JSON.stringify(currentTheme))
-document.body.setAttribute("data-theme", currentTheme)
-themeToggle.value = currentTheme
-themeToggle.checked = themeChecked
-
-themeToggle.addEventListener("click", () => {
-  console.log("currentTheme", currentTheme)
-  let themeChecked = false
-  if (currentTheme === "nord") {
-    currentTheme = "coffee"
-    themeChecked = false
-    addRemoveClassesForThemeCoffee()
-  } else {
-    currentTheme = "nord"
-    themeChecked = true
-    addRemoveClassesForThemeNord()
-  }
-  // currentTheme = currentTheme === "nord" ? "coffee" : "nord"
-  localStorage.setItem("theme", JSON.stringify(currentTheme))
-  document.body.setAttribute("data-theme", currentTheme)
-  themeToggle.value = currentTheme
-  themeToggle.checked = themeChecked
-})
-
-// let currentTheme = "coffee"
-// const handleThemeToggle = () => {
-//   console.log("currentTheme", currentTheme)
-//   if (currentTheme === "coffee") {
-//     currentTheme = "nord"
-//     localStorage.setItem("theme", JSON.stringify(currentTheme))
-//   htmlElement.setAttribute("data-theme", "nord")
-    
-//   } else {
-//     currentTheme = "coffee"
-//     localStorage.setItem("theme", JSON.stringify(currentTheme))
-//   htmlElement.setAttribute("data-theme", "coffee")
-
-//   }
-// }
-
-// if (theme === "nord") {
-//   htmlElement.setAttribute("data-theme", "nord")
-// } else {
-//   htmlElement.setAttribute("data-theme", "coffee")
-
-// }
-
-
-
-
-
-
-//! SCHEMAS
-//* TASK SCHEMA
-// id
-// text
-// status: "Active", "Completed", "Deleted"
-// priority: "Low", "Normal", "High", "Urgent"
-//* NOTES SCHEMA
-// id
-// title
-// text
-// isArchived?
-// category?
-
-
-// STATUS PING CIRCLE
-{/* <div class="inline-grid *:[grid-area:1/1]">
-  <div class="status status-error animate-ping"></div>
-  <div class="status status-error"></div>
-</div> */}
