@@ -21,11 +21,11 @@
 
 
   <div class="list-container">
-    <div class="add-task-inputs">
+    <fieldset class="add-task-inputs">
       <legend class="fieldset-legend cookie-font-color">ADD A NEW TASK:</legend>
             <input id="add-task-text" type="text" class="themed-input" placeholder="What to do..." />
             <label id="select-priority-bg">
-              <span class="label">Priority Level</span>
+              <span class="priority-input-label">Priority Level</span>
               <select id="add-task-priority" class="themed-select">
                 <option id="priority-low" value="Low">Low</option>
                 <option id="priority-normal" value="Normal" selected>Normal</option>
@@ -35,7 +35,7 @@
             </label>
             <button onclick="handleAddTask()" id="add-task-button" class="themed-button" disabled>Add Task</button>
             <button onclick="handleCancelTask()" id="cancel-task-text" class="themed-button">Cancel</button>
-    </div>
+    </fieldset>
 
     <div class="section-heading">Tasks</div>
     <ul id="todo-list-container" class="todo-list">
