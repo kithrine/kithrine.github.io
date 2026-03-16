@@ -2,13 +2,106 @@
 .coffee-bg-autumn {
   background-color: #261b25;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='88' height='24' viewBox='0 0 88 24'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='autumn' fill='%23c59f61' fill-opacity='0.15'%3E%3Cpath d='M10 0l30 15 2 1V2.18A10 10 0 0 0 41.76 0H39.7a8 8 0 0 1 .3 2.18v10.58L14.47 0H10zm31.76 24a10 10 0 0 0-5.29-6.76L4 1 2 0v13.82a10 10 0 0 0 5.53 8.94L10 24h4.47l-6.05-3.02A8 8 0 0 1 4 13.82V3.24l31.58 15.78A8 8 0 0 1 39.7 24h2.06zM78 24l2.47-1.24A10 10 0 0 0 86 13.82V0l-2 1-32.47 16.24A10 10 0 0 0 46.24 24h2.06a8 8 0 0 1 4.12-4.98L84 3.24v10.58a8 8 0 0 1-4.42 7.16L73.53 24H78zm0-24L48 15l-2 1V2.18A10 10 0 0 1 46.24 0h2.06a8 8 0 0 0-.3 2.18v10.58L73.53 0H78z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-}
-/* Nord Theme Background Autumn */
-.nord-bg-autumn {
-  background-color: #f3edef;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='88' height='24' viewBox='0 0 88 24'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='autumn' fill='%2388c0d0' fill-opacity='0.15'%3E%3Cpath d='M10 0l30 15 2 1V2.18A10 10 0 0 0 41.76 0H39.7a8 8 0 0 1 .3 2.18v10.58L14.47 0H10zm31.76 24a10 10 0 0 0-5.29-6.76L4 1 2 0v13.82a10 10 0 0 0 5.53 8.94L10 24h4.47l-6.05-3.02A8 8 0 0 1 4 13.82V3.24l31.58 15.78A8 8 0 0 1 39.7 24h2.06zM78 24l2.47-1.24A10 10 0 0 0 86 13.82V0l-2 1-32.47 16.24A10 10 0 0 0 46.24 24h2.06a8 8 0 0 1 4.12-4.98L84 3.24v10.58a8 8 0 0 1-4.42 7.16L73.53 24H78zm0-24L48 15l-2 1V2.18A10 10 0 0 1 46.24 0h2.06a8 8 0 0 0-.3 2.18v10.58L73.53 0H78z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  min-height: 100vh;
 }
 
+/* NAVBAR */
+.cookie-navbar {
+  background-color: var(--bg-light);
+  /* position: fixed;
+  top: 0;
+  left: 0;
+  right: 0; */
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+}
+
+.cookie-font-color {
+  color: #C59F61;
+}
+.cookie-title {
+  font-size: 2.5rem;
+}
+.cookie-subtitle {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+/* BACKGROUND COLORS */
+.bg-light {
+  background-color: #261B25;
+}
+.bg-med {
+  background-color: #1E151D;
+}
+.bg-dark {
+  background-color: #120C12;
+}
+.bg-darkest {
+  background-color: #120C12;
+}
+
+/* BORDER COLORS */
+.border-dark {
+  border-color: #120C12;
+}
+
+/* CUSTOM */
+.list-container {
+  background-color: #261B25;
+  /* border-color: #120C12; */
+  box-shadow: 3px 3px #1f151f;
+  /* border-width: 1px; */
+  border-radius: 15px;
+  margin-top: 1.5rem;
+}
+
+.add-task-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* When viewport is at least 768px wide, switch to row */
+@media (min-width: 768px) {
+  .add-task-inputs {
+    flex-direction: row;
+  }
+  .list-margins {
+    margin: 6rem;
+  }
+  .cookie-title {
+    font-size: 3.5rem;
+  }
+  .cookie-subtitle {
+    font-size: 1.75rem;
+  }
+}
+
+.list-margins {
+  text-align: center;
+  margin: 2rem;
+}
+
+.task-list {
+  border-radius: var(--radius-box);
+  word-break: break-word;
+  grid-auto-flow: column;
+  grid-template-columns: var(--list-grid-cols);
+  gap: 1rem;
+  padding: 1rem;
+  margin: 1rem;
+  display: grid;
+  position: relative;
+  background-color: var(--bg-med);
+}
+
+.hidden {
+  display: none;
+}
 
 /* FONTS */
 /* Titan One|Rubik Bubbles|Chewy|Wendy One|Sue Ellen Francisco|Nanum Pen Script|Delicious Handrawn */
@@ -49,6 +142,65 @@
   font-family: "Syncopate";
 }
 
-/* .name {
-  font-family: "";
+/* Themed form controls (native CSS) */
+:root {
+  --bg-light: #261B25;
+  --bg-med: #1E151D;
+  --bg-dark: #120C12;
+  --accent: #C59F61;
+  --control-bg: rgba(255,255,255,0.03);
+  --control-border: rgba(197,159,97,0.12);
+  --placeholder: rgba(197,159,97,0.45);
+}
+
+/* Make inputs grow nicely inside your existing `.add-task-inputs` flex container */
+/* .add-task-inputs > * {
+  flex: 1 1 0;
+  min-width: 0;
+} */
+
+/* .themed-input,
+.themed-textarea,
+.themed-select {
+  background-color: var(--control-bg);
+  color: var(--accent);
+  border: 1px solid var(--control-border);
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  outline: none;
+  transition: box-shadow .15s ease, border-color .12s ease;
+  font-family: inherit;
+}
+
+.themed-textarea { min-height: 3rem; resize: vertical; }
+
+.themed-input::placeholder,
+.themed-textarea::placeholder { color: var(--placeholder); }
+
+.themed-input:focus,
+.themed-textarea:focus,
+.themed-select:focus {
+  box-shadow: 0 0 0 4px rgba(197,159,97,0.08);
+  border-color: rgba(197,159,97,0.45);
+}
+
+.themed-button {
+  background-color: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 0.45rem 0.85rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color .12s ease, transform .06s ease;
+}
+
+.themed-button:hover { background-color: rgba(197,159,97,0.08); transform: translateY(-1px); } */
+
+/* Accessibility: ensure focus is visible for keyboard users */
+/* .themed-input:focus-visible,
+.themed-textarea:focus-visible,
+.themed-select:focus-visible,
+.themed-button:focus-visible {
+  outline: 2px solid rgba(197,159,97,0.18);
+  outline-offset: 2px;
 } */
