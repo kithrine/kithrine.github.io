@@ -9,6 +9,11 @@
   --placeholder: rgba(197,159,97,0.45);
 }
 
+body {
+  margin: 2rem;
+  text-align: center;
+}
+
 /* Coffee Theme Background Autumn */
 .coffee-bg-autumn {
   background-color: #261b25;
@@ -84,9 +89,7 @@
 @media (min-width: 768px) {
   .add-task-inputs {
     flex-direction: row;
-  }
-  .list-margins {
-    margin: 6rem;
+    align-items: stretch;
   }
   .cookie-title {
     font-size: 3.5rem;
@@ -97,11 +100,15 @@
   .themed-button {
     width: 25%;
   }
-}
-
-.list-margins {
-  text-align: center;
-  margin: 0.8rem;
+  #add-task-text,
+  .themed-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .priority-input-label {
+    font-size: 1rem;
+  }
 }
 
 .header { padding-bottom: 1rem; }
@@ -142,27 +149,31 @@ fieldset.add-task-inputs > .fieldset-legend {
   margin: 0 auto 0.5rem;
 }
 
-.priority-input-label { 
-  display: flex; 
-  align-items: center; 
+#select-priority-bg {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  flex: 1 1 0;
+  min-width: 0;
+  position: relative;
+}
+
+.priority-input-label {
+  position: absolute;
+  top: -0.7rem;
+  left: 0;
+  display: block; 
   gap: 0.5rem; 
-  font-size: 0.6rem;
+  font-size: 0.7rem;
+}
+
+#select-priority-bg .themed-select {
+  flex: 1 1 auto;
+  width: 100%;
+  margin: 0;
 }
 
 .task-actions { display:flex; gap:0.5rem; align-items:center; }
-
-.task-list {
-  border-radius: var(--radius-box);
-  word-break: break-word;
-  grid-auto-flow: column;
-  grid-template-columns: var(--list-grid-cols);
-  gap: 1rem;
-  padding: 1rem;
-  margin: 1rem;
-  display: grid;
-  position: relative;
-  background-color: var(--bg-med);
-}
 
 /* Layout helpers for add-task inputs */
 .add-task-inputs > * {
@@ -172,6 +183,30 @@ fieldset.add-task-inputs > .fieldset-legend {
 
 #add-task-priority {
   width: 100%;
+}
+
+.edit-priority-select {
+  background-color: var(--control-bg);
+  color: var(--accent);
+  border: 1px solid var(--control-border);
+  padding: 0.15rem 0.35rem;
+  border-radius: 100px;
+  outline: none;
+  transition: box-shadow .15s ease, border-color .12s ease;
+  font-family: inherit;
+  font-size: 0.75rem;
+}
+
+.edit-input {
+  background-color: var(--control-bg);
+  color: var(--accent);
+  border: 1px solid var(--control-border);
+  padding: 0.25rem 0.55rem;
+  border-radius: 8px;
+  outline: none;
+  transition: box-shadow .15s ease, border-color .12s ease;
+  font-family: inherit;
+  width: 90%;
 }
 
 /* Themed form controls (native CSS) */
@@ -261,7 +296,10 @@ fieldset.add-task-inputs > .fieldset-legend {
 
 .task-content { flex: 1 1 auto; text-align: left; }
 
-.task-text { color: var(--accent); }
+.task-text { 
+  color: var(--accent); 
+  font-size: 0.875rem;
+}
 
 .priority-badge {
   display: inline-block;

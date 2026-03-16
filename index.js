@@ -174,7 +174,7 @@ const displayTodoTasks = (tasks) => {
             </select>
             <div id="task-priority-badge-${task.id}" class="priority-badge ${badgeClass}">${task.priority}</div>
           </div>
-            <input id="editInput-${task.id}" type="text" placeholder="Edit task..." class="edit-input hidden" value="${task.text}" />
+            <input id="editInput-${task.id}" type="text" placeholder="Edit task..." class="edit-input themed-input hidden" value="${task.text}" />
             <div id="task-text-${task.id}" class="task-text">${task.text}</div>
           </div>
           <div class="task-actions">
