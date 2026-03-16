@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,100,0,0&icon_names=list_alt" />
     <link
     rel="stylesheet"
     href="https://fonts.googleapis.com/css?family=Syncopate|Rubik|Titan One|Rubik Bubbles|Chewy|Wendy One|Sue Ellen Francisco|Nanum Pen Script|Delicious Handrawn"
@@ -13,16 +12,6 @@
 </head>
 
 <body id="body-background" class="coffee-bg-autumn rubik cookie-font-color">
-  <!-- simple navbar (native css) -->
-  <!-- <div class="cookie-navbar">
-    <div>
-      <div class="titan-one">Cookie</div>
-      <p class="delicious-handrawn">To Do List</p>
-    </div>
-    <div>
-      <input id="searchbox" type="text" placeholder="Search tasks & notes!" class="themed-input" />
-    </div>
-  </div> -->
 
 <div class="list-margins">
   <div class="header">
@@ -32,8 +21,8 @@
 
 
   <div class="list-container">
-    <fieldset class="add-task-inputs">
-      <legend class="fieldset-legend tracking-wider uppercase text-sm cookie-font-color">Add a new task:</legend>
+    <div class="add-task-inputs">
+      <legend class="fieldset-legend cookie-font-color">ADD A NEW TASK:</legend>
             <input id="add-task-text" type="text" class="themed-input" placeholder="What to do..." />
             <label id="select-priority-bg">
               <span class="label">Priority Level</span>
@@ -46,7 +35,7 @@
             </label>
             <button onclick="handleAddTask()" id="add-task-button" class="themed-button" disabled>Add Task</button>
             <button onclick="handleCancelTask()" id="cancel-task-text" class="themed-button">Cancel</button>
-    </fieldset>
+    </div>
 
     <div class="section-heading">Tasks</div>
     <ul id="todo-list-container" class="todo-list">

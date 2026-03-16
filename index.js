@@ -36,7 +36,7 @@ const buildTodoList = (task, index) => {
               <option value="High">High</option>
               <option value="Urgent">Urgent</option>
             </select>
-            <div id="task-priority-badge-${task.id}" class="priority-badge priority-${task.priority}">${task.priority}</div>
+            <div id="task-priority-badge-${task.id}" class="priority-badge priority-${task.priority.toLowerCase()}">${task.priority}</div>
           </div>
             <input id="editInput-${task.id}" type="text" placeholder="Edit task..." class="edit-input hidden" value="${task.text}" />
             <div id="task-text-${task.id}" class="task-text">${task.text}</div>
@@ -118,6 +118,8 @@ const handleEditTask = (id) => {
     localStorage.setItem("tasks", JSON.stringify(tasks))
     taskText.innerHTML = updatedTaskText
     priorityBadge.innerHTML = updatedPriority
+    // update badge class to match new priority (use lowercase to match CSS)
+    priorityBadge.className = `priority-badge priority-${updatedPriority.toLowerCase()}`
     editInput.classList.add("hidden")
     taskText.classList.remove("hidden")
     editPriorityDropdown.classList.add("hidden")
@@ -135,30 +137,6 @@ const handleDeleteTask = (id) => {
   localStorage.setItem("tasks", JSON.stringify(tasks))
   taskItem.remove()
   buildAllTaskHTMLFunctions()
-}
-
-let taskCompleteClick = false
-//* COMPLETE TASK
-const handleCompleteTask = (id) => {
-  console.log("tasks1111111", tasks)
-  const taskIndex = tasks.findIndex(task => task.id === id)
-  console.log("taskIndex", taskIndex)
-
-  if (taskCompleteClick === false) {
-    console.log("HERE", tasks[taskIndex])
-    tasks[taskIndex].status = "Completed"
-    const completedTask = tasks.splice(taskIndex, 1)[0]
-    console.log("completedTask", completedTask)
-    completedTasks.push(completedTask)
-    console.log("completedTask", completedTask)
-    localStorage.setItem("tasks", JSON.stringify(tasks))
-    localStorage.setItem("completedTasks", JSON.stringify(completedTasks))
-    console.log("taskCompleteClick tasks", tasks)
-    buildAllTaskHTMLFunctions()
-  } else {
-    taskCompleteClick = true
-  }
-  console.log("completedTasks", completedTasks)
 }
 
 //* CLEAR OUT ADD TASK INPUT
@@ -179,310 +157,39 @@ addTaskText.addEventListener("input", () => {
 })
 
 
-
-
-
-
-
-
-
-
-
-
-
-//! COMPLETED TASKS LIST
-//* BUILD COMPLETED TASK LIST
-const buildCompletedList = (task, index) => {
-  // console.log("task.status", task.status)
-  // console.log("task.priority", task.priority)
-  const badgeColors = task.priority === "Low" ? "badge-info" : task.priority === "Normal" ? "badge-success" : task.priority === "High" ? "badge-warning" : task.priority === "Urgent" ? "badge-error" : "badge-neutral"
- 
-  return `
-      <li id="${task.id}" class="task-row">
-        <div id="task-id" class="task-index">${index + 1}</div>
-        <div class="task-content">
-          <div>
-            <div id="task-priority-badge" class="priority-badge priority-${task.priority}">${task.priority}</div>
-          </div>
-            <input id="editInput-${task.id}" type="text" placeholder="Edit task..." class="edit-input hidden" value="${task.text}" />
-            <div id="task-text-${task.id}" class="task-text">${task.text}</div>
-          </div>
-        </li>
-      `
-}
-
-//* LOAD COMPLETED TASK LIST FROM LOCAL STORAGE
-const buildCompletedListHTML = () => {
-  completedContainer.innerHTML = ""
-  if (completedTasks.length > 0) {
-    completedTasks.forEach((task, index) => {
-      // Add to HTML
-      completedContainer.insertAdjacentHTML("beforeend", buildCompletedList(task, index))
-      })
-  }
-}
-buildCompletedListHTML()
-
-
-
-
-
-
-
-
-
-
-
-
-//! NOTES
-//* BUILD NOTES LIST
-const buildNotesList = (note, index) => {
-  return `
-    <li id="${note.id}" class="task-row">
-        <div id="note-id" class="task-index">${index + 1}</div>
-        <div class="task-content">
-          <div id="note-title-${note.id}" class="text-lg uppercase opacity-80">${note.title}</div>
-          <p id="note-text-${note.id}" class="list-col-wrap text-sm">${note.text}</p>
-          <textarea id="edit-note-textarea-${note.id}" class="themed-textarea hidden">${note.text}</textarea>
-        </div>
-        <div class="task-actions">
-          <button onclick="handleEditNote('${note.id}')" class="icon-button">${editIcon}</button>
-          <button onclick="handleDeleteNote('${note.id}')" class="icon-button">${deleteIcon}</button>
-        </div>
-      </li>
-      `
-}
-
-//* LOAD NOTES LIST FROM LOCAL STORAGE
-const buildNotesListHTML = () => {
-  notesContainer.innerHTML = ""
-  if (notes.length > 0) {
-    notes.forEach((note, index) => {
-      // Add to HTML
-      notesContainer.insertAdjacentHTML("beforeend", buildNotesList(note, index))
-      })
-  }
-}
-buildNotesListHTML()
-
-//* ADD NEW NOTE
-const handleAddNote = () => {
-  // Create note record
-  const newNote = { id: crypto.randomUUID(), title: addNoteTitle.value, text: addNoteText.value }
-  notes.push(newNote)
-  
-  // Populate new note item into todo list by pushing new note into list build function (as to not have repeating template literal HTML code in 2 places)
-  const newNoteHTML = buildNotesList(newNote, notes.length - 1)
-  notesContainer.insertAdjacentHTML("beforeend", newNoteHTML)
-  
-  // Repopulate entire localStorage with all notes
-  localStorage.setItem("notes", JSON.stringify(notes))
-
-  // Clear title and note text
-  addNoteTitle.value = ""
-  addNoteText.value = ""
-  // Re-disable 'Add Note' button
-  addNoteButton.setAttribute("disabled", "")
-}
-
-//* EDIT NOTE
-let currentlyEditingNote = false
-// console.log("first currentlyEditingNote", currentlyEditingNote)
-const handleEditNote = (id) => {
-  // Get note info
-  const noteText = document.getElementById(`note-text-${id}`)
-  const editNoteTextarea = document.getElementById(`edit-note-textarea-${id}`)  
-  const noteIndex = notes.findIndex(note => note.id === id)
-
-  if (currentlyEditingNote === false) {
-    currentlyEditingNote = true
-    editNoteTextarea.classList.remove("hidden")
-    noteText.classList.add("hidden")
-
-  } else {
-    currentlyEditingNote = false
-    let updatedNoteText = editNoteTextarea.value
-    notes[noteIndex].text = updatedNoteText
-    localStorage.setItem("notes", JSON.stringify(notes))
-    noteText.innerHTML = updatedNoteText
-    editNoteTextarea.classList.add("hidden")
-    noteText.classList.remove("hidden")
-    buildNotesListHTML()
-  }
-  // if (currentTheme === "nord") {
-  //   editNoteTextarea.classList.remove("bg-neutral")
-  //   editNoteTextarea.classList.add("bg-base-200")
-  // }
-}
-
-//* DELETE/REMOVE NOTE (ARCHIVE)
-const handleDeleteNote = (id) => {
-  let noteItem = document.getElementById(id)
-  let noteIndex = notes.findIndex(note => note.id === id)
-  notes.splice(noteIndex, 1)
-  localStorage.setItem("notes", JSON.stringify(notes))
-  noteItem.remove()
-  buildNotesListHTML()
-}
-
-//* CLEAR OUT ADD NOTE INPUT
-const handleCancelNote = () => {
-  addNoteTitle.value = ""
-  addNoteText.value = ""
-  addNoteButton.setAttribute("disabled", "")
-}
-
-//* DISABLE 'ADD NOTE' BUTTON IF NO TEXT IN INPUT FIELD/NO PRIORITY LEVEL SELECTED
-const noteValidityCheck = () => {
-  if (addNoteTitle.value !== "" && addNoteText.value !== "") {
-    // addNoteButton.classList.remove("btn-disabled")
-    addNoteButton.removeAttribute("disabled")
-  } else {
-    // addNoteButton.classList.add("btn-disabled")
-    addNoteButton.setAttribute("disabled", "")
-  }
-}
-
-addNoteTitle.addEventListener("input", () => {
-  noteValidityCheck()
-})
-addNoteText.addEventListener("input", () => {
-  noteValidityCheck()
-})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//! DYNAMIC SEARCH FILTERING
-const searchbox = document.getElementById("searchbox")
-
-const dynamicSearchFilter = () => {
-  const searchTerm = searchbox.value.toLowerCase()
-
-  // Filter Todo List 'tasks' array based on the search term
-  const filteredTasks = tasks.filter(task => {
-    return (
-      task.text.toLowerCase().includes(searchTerm) || // search task text
-      task.priority.toLowerCase().includes(searchTerm) // search priority level
-    )
-  })
-
-  const filteredCompletedTasks = completedTasks.filter(completedTask => {
-    return (
-      completedTask.text.toLowerCase().includes(searchTerm) ||
-      completedTask.priority.toLowerCase().includes(searchTerm)
-    )
-  })
-
-  const filteredNotes = notes.filter(note => {
-    return (
-      note.title.toLowerCase().includes(searchTerm) ||
-      note.text.toLowerCase().includes(searchTerm)
-    )
-  })
-  displayTodoTasks(filteredTasks) // Render the filtered tasks in Todo List
-  displayCompletedTasks(filteredCompletedTasks) // Render the filtered tasks in Completed List
-  displayNotes(filteredNotes) // Render the filtered notes in Notes List
-}
-
 const displayTodoTasks = (tasks) => {
   todoListContainer.innerHTML = "" // clear exisiting tasks
 
   tasks.forEach((task, index) => {
-    const badgeColors = task.priority === "Low" ? "badge-info" : task.priority === "Normal" ? "badge-success" : task.priority === "High" ? "badge-warning" : task.priority === "Urgent" ? "badge-error" : "badge-neutral"
+    const badgeClass = task.priority ? `priority-${task.priority.toLowerCase()}` : 'priority-normal'
 
     const taskItem = `
-      <li id="${task.id}" class="list-row pb-1">
-        <div id="task-id" class="text-4xl font-thin opacity-30 tabular-nums">${index + 1}</div>
-        <div class="list-col-grow">
+      <li id="${task.id}" class="task-row">
+        <div id="task-id" class="task-index">${index + 1}</div>
+        <div class="task-content">
           <div>
-            <select id="edit-priority-dropdown-${task.id}" class="badge badge-neutral border-base-content/50 hidden">
-              <option disabled selected value="${task.priority}" class="bg-base-200">${task.priority}</option>
-              <option value="Low" class="bg-info text-neutral hover:text-neutral-content">Low</option>
-              <option value="Normal" class="bg-success text-neutral hover:text-neutral-content">Normal</option>
-              <option value="High" class="bg-warning text-neutral hover:text-neutral-content">High</option>
-              <option value="Urgent" class="bg-error text-neutral hover:text-neutral-content">Urgent</option>
+            <select id="edit-priority-dropdown-${task.id}" class="edit-priority-select hidden">
+              <option disabled selected value="${task.priority}">${task.priority}</option>
+              <option value="Low">Low</option>
+              <option value="Normal">Normal</option>
+              <option value="High">High</option>
+              <option value="Urgent">Urgent</option>
             </select>
-            <div id="task-priority-badge-${task.id}" class="badge ${badgeColors}">${task.priority}</div>
+            <div id="task-priority-badge-${task.id}" class="priority-badge ${badgeClass}">${task.priority}</div>
           </div>
-            <input id="editInput-${task.id}" type="text" placeholder="Edit task..." class="input input-sm hidden mt-1 text-base mb-1" value="${task.text}" />
-            <div id="task-text-${task.id}" class="pt-2 pb-1.5 text-base">${task.text}</div>
+            <input id="editInput-${task.id}" type="text" placeholder="Edit task..." class="edit-input hidden" value="${task.text}" />
+            <div id="task-text-${task.id}" class="task-text">${task.text}</div>
           </div>
-          <button onclick="handleEditTask('${task.id}')" class="btn btn-square btn-ghost">
-           ${editIcon}
-          </button>
-          <button onclick="handleCompleteTask('${task.id}')" class="btn btn-square btn-ghost">
-            ${checkmarkIcon}
-          </button>
-        <button onclick="handleDeleteTask('${task.id}')" class="btn btn-square btn-ghost">
-          ${deleteIcon}
-        </button>
+          <div class="task-actions">
+            <button onclick="handleEditTask('${task.id}')" class="icon-button">${editIcon}</button>
+            <button onclick="handleCompleteTask('${task.id}')" class="icon-button">${checkmarkIcon}</button>
+            <button onclick="handleDeleteTask('${task.id}')" class="icon-button">${deleteIcon}</button>
+          </div>
       </li>
     `
     todoListContainer.insertAdjacentHTML("beforeend", taskItem)
   })
 }
-
-const displayCompletedTasks = (completedTasks) => {
-  completedContainer.innerHTML = "" // clear exisiting completed tasks
-
-  completedTasks.forEach((completedTask, index) => {
-    const badgeColors = completedTask.priority === "Low" ? "badge-info" : completedTask.priority === "Normal" ? "badge-success" : completedTask.priority === "High" ? "badge-warning" : completedTask.priority === "Urgent" ? "badge-error" : "badge-neutral"
-
-    const completedTaskItem = `
-      <li id="${completedTask.id}" class="list-row">
-        <div id="task-id" class="text-4xl font-thin opacity-30 tabular-nums">${index + 1}</div>
-        <div class="list-col-grow">
-          <div>
-            <div id="task-priority-badge" class="badge ${badgeColors}">${completedTask.priority}</div>
-          </div>
-          <input id="editInput-${completedTask.id}" type="text" placeholder="Edit task..." class="input input-sm hidden" value="${completedTask.text}" />
-          <div id="task-text-${completedTask.id}" class="">${completedTask.text}</div>
-        </div>
-      </li>
-    `
-    completedContainer.insertAdjacentHTML("beforeend", completedTaskItem)
-  })
-}
-
-const displayNotes = (notes) => {
-  notesContainer.innerHTML = "" // clear exisiting notes
-
-  notes.forEach((note, index) => {
-    const noteItem = `
-      <li id="${note.id}" class="list-row">
-        <div id="note-id" class="text-4xl font-thin opacity-30 tabular-nums">${index + 1}</div>
-        <div class="flex items-center">
-          <div id="note-title-${note.id}" class="text-lg uppercase opacity-80">${note.title}</div>
-        </div>
-        <p id="note-text-${note.id}" class="list-col-wrap text-sm">
-          ${note.text}
-        </p>
-        <textarea id="edit-note-textarea-${note.id}" class="textarea list-col-wrap  bg-neutral w-full h-36 hidden" value="${note.text}">${note.text}</textarea>
-        <button onclick="handleEditNote('${note.id}')" class="btn btn-square btn-ghost">
-          ${editIcon}
-        </button>
-        <button onclick="handleDeleteNote('${note.id}')" class="btn btn-square btn-ghost">
-          ${deleteIcon}
-        </button>
-      </li>
-    `
-    notesContainer.insertAdjacentHTML("beforeend", noteItem)
-  })
-}
-
-searchbox.addEventListener("input", dynamicSearchFilter)
 
 
 //! ALL FUNCTIONS FOR BUILDING HTML OF LISTS FOR TASKS!
@@ -494,18 +201,6 @@ const buildAllTaskHTMLFunctions = () => {
     buildNormalListHTML()
     buildLowListHTML()
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
