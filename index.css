@@ -27,7 +27,7 @@ body {
 }
 
 .list-container {
-  background-color: #261B25;
+  background-color: var(--bg-light);
   box-shadow: 3px 3px #1f151f;
   border-radius: 15px;
   margin-top: 1.5rem;
@@ -294,7 +294,7 @@ fieldset.add-task-inputs>.fieldset-legend {
 /* Medium screens (768px and up) */
 @media (min-width: 768px) {
   body {
-    margin: 4rem;
+    margin: 2rem 6rem;
   }
 
   .add-task-inputs {
@@ -362,7 +362,7 @@ fieldset.add-task-inputs>.fieldset-legend {
 /* Large screens (1024px and up) */
 @media (min-width: 1024px) {
   body {
-    margin: 6rem;
+    margin: 2rem 10rem;
   }
 
   .cookie-title {
