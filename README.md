@@ -1,27 +1,41 @@
-# Cookie: To Do & Notes app
+# Cookie: To Do List
+
+## Overview
+Cookie is a todo list app built with pure HTML, CSS, and JavaScript—no frameworks or CSS libraries. It demonstrates responsive design, custom theming, and interactive UI, all with native web technologies.
 
 ## Technologies/Styling
 - JavaScript
+- HTML
+- CSS
 - Hero Patterns
 - Google Fonts
 
 ## Features
-- CRUD for tasks and notes
-- Status and Priority level for tasks
-- Dark/Light mode theme toggle
-- Local storage for tasks, completed tasks, notes, and theme
-- Dynamic search filtering on task text, task priority, and note title and text
-- crypto.randomUUID() method for the task.id and note.id to help with errors of using the index or tasks.length for the id on 
-- Dynamic classes for the priority badge
-- Validation for enabling and disabling of add button for tasks and notes so you must have text in order to add a new one
+- CRUD for tasks: With inline editing of tasks.
+- Task Prioritization: Assign and visually highlight priority levels (Low, Normal, High, Urgent) with color-coded badges by using dynamic classes.
+- Local Storage: Tasks persist between sessions using browser localStorage.
+- Responsive Layout: Flexbox and media queries ensure the app looks great on all screen sizes.
+- crypto.randomUUID() method for the task id to help with errors of using the index of tasks.length.
+- Validation: Enabling and disabling of add task button so you must have text in the input in order to add a new task.
+- Custom Theming: Uses CSS variables for easy color and theme adjustments.
+- No Frameworks: 100% native HTML, CSS, and JS—no Tailwind, Bootstrap, or external libraries.
+- Modern UI: Clean, visually appealing design with custom fonts and subtle background patterns.
 
-## Future Considerations
-- Modal for confirmation of deletion of a task/note
-- Adding dates/timestamps
-- Note categories
-- User input for creating their own note categories
-- Delete for completed tasks
-- Definitely some more animations/motion
+## How to Use
+- Enter a task in the input field.
+- Select a priority level.
+- Click "Add Task" to add it to your list.
+- Edit or delete tasks using the icons next to each item.
+- Your tasks are saved automatically in your browser.
 
-## How To Run Project
-- Make sure that you have Live Server extension installed and click on the `Go Live` button at the bottom righthand corner of your VS Code editor
+## Screenshots
+(Add screenshots of your app on desktop and mobile views here!)
+
+## Getting Started
+Just open index.html in your browser. No build steps or dependencies required.
+
+## Future Considerations for Improvements
+- Modal for confirmation of permanent deletion of a task.
+- Adding dates/timestamps and reminders.
+- Completion and archiving tasks.
+- Task filtering and search.

@@ -37,7 +37,8 @@ const buildTodoList = (task, index) => {
         <div id="task-text-${task.id}" class="task-text">${task.text}</div>
       </div>
       <div class="task-actions">
-        <button onclick="handleEditTask('${task.id}')" class="icon-button" aria-label="edit">${editIcon}</button>
+        <button id="save-edit-${task.id}" onclick="handleEditTask('${task.id}')" class="icon-button hidden" aria-label="edit">Save</button>
+        <button id="edit-button-${task.id}" onclick="handleEditTask('${task.id}')" class="icon-button" aria-label="edit">${editIcon}</button>
         <button onclick="handleDeleteTask('${task.id}')" class="icon-button" aria-label="delete">${deleteIcon}</button>
       </div>
     </li>
@@ -87,6 +88,8 @@ const handleEditTask = (id) => {
   const editInput = document.getElementById(`editInput-${id}`)
   const priorityBadge = document.getElementById(`task-priority-badge-${id}`)
   const editPriorityDropdown = document.getElementById(`edit-priority-dropdown-${id}`)
+  const editButton = document.getElementById(`edit-button-${id}`)
+  const saveEditButton = document.getElementById(`save-edit-${id}`)
   
   // Get task index in tasks array
   const taskIndex = tasks.findIndex(task => task.id === id)
@@ -94,10 +97,12 @@ const handleEditTask = (id) => {
   // Toggle edit mode (if not currently editing, open edit input. If currently editing, save changes and close edit input)
   if (currentlyEditing === false) {
     currentlyEditing = true
-    editInput.classList.remove("hidden")
     taskText.classList.add("hidden")
-    editPriorityDropdown.classList.remove("hidden")
+    editButton.classList.add("hidden")
     priorityBadge.classList.add("hidden")
+    editInput.classList.remove("hidden")
+    saveEditButton.classList.remove("hidden")
+    editPriorityDropdown.classList.remove("hidden")
   } else {
     currentlyEditing = false
     let updatedTaskText = editInput.value
@@ -109,10 +114,12 @@ const handleEditTask = (id) => {
     priorityBadge.innerHTML = updatedPriority
     // Update badge color based on updated priority level
     priorityBadge.className = `priority-badge priority-${updatedPriority.toLowerCase()}`
-    editInput.classList.add("hidden")
     taskText.classList.remove("hidden")
-    editPriorityDropdown.classList.add("hidden")
+    editButton.classList.remove("hidden")
     priorityBadge.classList.remove("hidden")
+    editInput.classList.add("hidden")
+    editPriorityDropdown.classList.add("hidden")
+    saveEditButton.classList.add("hidden")
     buildTodoListHTML()
   }
 }
