@@ -17,34 +17,32 @@ const deleteIcon = `<svg xmlns="http://www.w3.org/2000/svg" height="20" width="2
 //! MAIN TODO LIST
 //* BUILD TODO LIST
 const buildTodoList = (task, index) => {
-  // console.log("buildTodoList task", task)
-  // console.log("task.status", task.status)
-  // console.log("task.priority", task.priority)
+  // Dynamic badge colors based on priority level
   const badgeColors = task.priority === "Low" ? "priority-low" : task.priority === "Normal" ? "priority-normal" : task.priority === "High" ? "priority-high" : task.priority === "Urgent" ? "priority-urgent" : "priority-neutral"
  
   return `
-      <li id="${task.id}" class="task-row">
-        <div id="task-id" class="task-index">${index + 1}</div>
-        <div class="task-content">
-          <div>
-            <select id="edit-priority-dropdown-${task.id}" class="edit-priority-select hidden">
-              <option disabled selected value="${task.priority}">${task.priority}</option>
-              <option value="Low">Low</option>
-              <option value="Normal">Normal</option>
-              <option value="High">High</option>
-              <option value="Urgent">Urgent</option>
-            </select>
-            <div id="task-priority-badge-${task.id}" class="priority-badge priority-${task.priority.toLowerCase()}">${task.priority}</div>
-          </div>
-            <input id="editInput-${task.id}" type="text" placeholder="Edit task..." class="edit-input hidden" value="${task.text}" />
-            <div id="task-text-${task.id}" class="task-text">${task.text}</div>
-          </div>
-          <div class="task-actions">
-          <button onclick="handleEditTask('${task.id}')" class="icon-button" aria-label="edit">${editIcon}</button>
-          <button onclick="handleDeleteTask('${task.id}')" class="icon-button" aria-label="delete">${deleteIcon}</button>
-          </div>
-        </li>
-      `
+    <li id="${task.id}" class="task-row">
+      <div id="task-id" class="task-index">${index + 1}</div>
+      <div class="task-content">
+        <div>
+          <select id="edit-priority-dropdown-${task.id}" class="edit-priority-select hidden">
+            <option disabled selected value="${task.priority}">${task.priority}</option>
+            <option value="Low">Low</option>
+            <option value="Normal">Normal</option>
+            <option value="High">High</option>
+            <option value="Urgent">Urgent</option>
+          </select>
+          <div id="task-priority-badge-${task.id}" class="priority-badge priority-${task.priority.toLowerCase()}">${task.priority}</div>
+        </div>
+        <input id="editInput-${task.id}" type="text" placeholder="Edit task..." class="edit-input hidden" value="${task.text}" />
+        <div id="task-text-${task.id}" class="task-text">${task.text}</div>
+      </div>
+      <div class="task-actions">
+        <button onclick="handleEditTask('${task.id}')" class="icon-button" aria-label="edit">${editIcon}</button>
+        <button onclick="handleDeleteTask('${task.id}')" class="icon-button" aria-label="delete">${deleteIcon}</button>
+      </div>
+    </li>
+  `
 }
 
 //* LOAD TODO LIST DATA FROM LOCAL STORAGE
@@ -62,12 +60,9 @@ buildTodoListHTML()
 
 //* ADD NEW TASK
 const handleAddTask = () => {
-  console.log("addTaskButton click", addTaskText.value)
   // Create task record
-  const newTask = { id: crypto.randomUUID(), text: addTaskText.value, priority: addTaskPriority.value, status: "Active" }
-  tasks.push(newTask)
-  console.log("tasks0000", tasks)
-  console.log("newTask", newTask, "tasks", tasks, tasks.length)
+  const newTask = { id: crypto.randomUUID(), text: addTaskText.value, priority: addTaskPriority.value }
+  tasks.unshift(newTask)
   
   // Populate new task item into todo list by pushing new task into list build function (as to not have repeating template literal HTML code in 2 places)
   const newTaskHTML = buildTodoList(newTask, tasks.length - 1)

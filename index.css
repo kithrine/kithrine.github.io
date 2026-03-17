@@ -21,20 +21,6 @@ body {
   min-height: 100vh;
 }
 
-/* NAVBAR */
-.cookie-navbar {
-  background-color: var(--bg-light);
-  /* position: fixed;
-  top: 0;
-  left: 0;
-  right: 0; */
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem;
-}
-
 .cookie-font-color {
   color: #C59F61;
 }
@@ -44,25 +30,6 @@ body {
 .cookie-subtitle {
   font-size: 1.25rem;
   margin: 0;
-}
-
-/* BACKGROUND COLORS */
-.bg-light {
-  background-color: #261B25;
-}
-.bg-med {
-  background-color: #1E151D;
-}
-.bg-dark {
-  background-color: #120C12;
-}
-.bg-darkest {
-  background-color: #120C12;
-}
-
-/* BORDER COLORS */
-.border-dark {
-  border-color: #120C12;
 }
 
 /* CUSTOM */
@@ -85,33 +52,6 @@ body {
   gap: 1rem;
 }
 
-/* When viewport is at least 768px wide, switch to row */
-@media (min-width: 768px) {
-  .add-task-inputs {
-    flex-direction: row;
-    align-items: stretch;
-  }
-  .cookie-title {
-    font-size: 3.5rem;
-  }
-  .cookie-subtitle {
-    font-size: 1.75rem;
-  }
-  .themed-button {
-    width: 25%;
-  }
-  #add-task-text,
-  .themed-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .priority-input-label {
-    font-size: 1rem;
-  }
-}
-
-.header { padding-bottom: 1rem; }
 .section-heading {
   padding: 0.75rem 0.25rem;
   font-size: 1.25rem;
@@ -175,15 +115,6 @@ fieldset.add-task-inputs > .fieldset-legend {
 
 .task-actions { display:flex; gap:0.5rem; align-items:center; }
 
-/* Layout helpers for add-task inputs */
-.add-task-inputs > * {
-  flex: 1 1 0;
-  min-width: 0;
-}
-
-#add-task-priority {
-  width: 100%;
-}
 
 .edit-priority-select {
   background-color: var(--control-bg);
@@ -195,6 +126,11 @@ fieldset.add-task-inputs > .fieldset-legend {
   transition: box-shadow .15s ease, border-color .12s ease;
   font-family: inherit;
   font-size: 0.75rem;
+}
+
+select option {
+  background-color: var(--control-bg)!important;
+  color: var(--accent);
 }
 
 .edit-input {
@@ -289,7 +225,7 @@ fieldset.add-task-inputs > .fieldset-legend {
 .task-index {
   font-size: 1.75rem;
   opacity: 0.25;
-  width: 2ch;
+  min-width: 1.5ch;
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
@@ -312,6 +248,7 @@ fieldset.add-task-inputs > .fieldset-legend {
 .priority-normal { background:#86efac; color:#052008; }
 .priority-high { background:#fde68a; color:#4a2f02; }
 .priority-urgent { background:#fb7185; color:#3a0a0f; }
+.priorrity-neutral { background:#d1d5db; color:#111111; }
 
 .icon-button {
   background: transparent;
@@ -330,31 +267,122 @@ fieldset.add-task-inputs > .fieldset-legend {
   display: none;
 }
 
+/* RESPONSIVE */
+/* Media queries for medium screens (768px and up) */
+@media (min-width: 768px) {
+  body {
+    margin: 4rem;
+  }
+  .add-task-inputs {
+    flex-direction: row;
+    align-items: stretch;
+  }
+  .cookie-title {
+    font-size: 3rem;
+  }
+  .cookie-subtitle {
+    font-size: 1.5rem;
+  }
+  .themed-button {
+    width: 100%;
+  }
+  #add-task-text,
+  .themed-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .priority-input-label {
+    font-size: 0.7rem;
+  }
+  /* Proportional flex for add-task row */
+  .add-task-inputs > #add-task-text {
+    flex: 3 1 0;
+    min-width: 0;
+  }
+  .add-task-inputs > #select-priority-bg,
+  .add-task-inputs > #add-task-button,
+  .add-task-inputs > #cancel-task-text {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  #add-task-priority {
+    width: 100%;
+  }
+  .add-task-inputs {
+    flex-direction: row;
+    align-items: stretch;
+  }
+  .add-task-inputs > #add-task-text {
+    flex: 3 1 0;
+    max-width: none;
+  }
+  .add-task-inputs > #select-priority-bg,
+  .add-task-inputs > #add-task-button,
+  .add-task-inputs > #cancel-task-text {
+    flex: 1 1 0;
+    max-width: none;
+  }
+}
+/* Media queries for large screens (1024px and up) */
+@media (min-width: 1024px) {
+  body {
+    margin: 6rem;
+  }
+  .cookie-title {
+    font-size: 3.75rem;
+  }
+  .cookie-subtitle {
+    font-size: 1.75rem;
+  }
+  .themed-button {
+    width: 100%;
+  }
+  #add-task-text,
+  .themed-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .priority-input-label {
+    font-size: 0.07rem;
+  }
+  /* Proportional flex for add-task row */
+  .add-task-inputs > #add-task-text {
+    flex: 4 1 0;
+    min-width: 0;
+  }
+  .add-task-inputs > #select-priority-bg,
+  .add-task-inputs > #add-task-button,
+  .add-task-inputs > #cancel-task-text {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  #add-task-priority {
+    width: 100%;
+  }
+  .add-task-inputs {
+    flex-direction: row;
+    align-items: stretch;
+  }
+  .add-task-inputs > #add-task-text {
+    flex: 3 1 0;
+    max-width: none;
+  }
+  .add-task-inputs > #select-priority-bg,
+  .add-task-inputs > #add-task-button,
+  .add-task-inputs > #cancel-task-text {
+    flex: 1 1 0;
+    max-width: none;
+  }
+}
+
+
 /* FONTS */
 /* Titan One|Rubik Bubbles|Chewy|Wendy One|Sue Ellen Francisco|Nanum Pen Script|Delicious Handrawn */
 
 .titan-one {
   font-family: "Titan One";
-}
-
-.rubik-bubbles {
-  font-family: "Rubik Bubbles";
-}
-
-.chewy {
-  font-family: "Chewy";
-}
-
-.wendy-one {
-  font-family: "Wendy One";
-}
-
-.sue-ellen {
-  font-family: "Sue Ellen Francisco";
-}
-
-.pen-script {
-  font-family: "Nanum Pen Script";
 }
 
 .delicious-handrawn {
@@ -363,8 +391,4 @@ fieldset.add-task-inputs > .fieldset-legend {
 
 .rubik {
   font-family: "Rubik";
-}
-
-.syncopate {
-  font-family: "Syncopate";
 }

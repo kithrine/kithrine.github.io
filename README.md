@@ -1,10 +1,7 @@
 # Cookie: To Do & Notes app
 
 ## Technologies/Styling
-- Javascript
-- Tailwindcss
-- Animate.css
-- DaisyUI
+- JavaScript
 - Hero Patterns
 - Google Fonts
 

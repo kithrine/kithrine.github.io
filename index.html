@@ -5,43 +5,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link
     rel="stylesheet"
-    href="https://fonts.googleapis.com/css?family=Syncopate|Rubik|Titan One|Rubik Bubbles|Chewy|Wendy One|Sue Ellen Francisco|Nanum Pen Script|Delicious Handrawn"
+    href="https://fonts.googleapis.com/css?family=Rubik|Titan One|Delicious Handrawn"
     />
     <link rel="stylesheet" type="text/css" href="index.css" />
   <title>Cookie: Todo List</title>
 </head>
 
 <body id="body-background" class="coffee-bg-autumn rubik cookie-font-color">
+  <div class="list-margins">
+    <div class="header">
+      <div class="cookie-title titan-one">Cookie</div>
+      <p class="cookie-subtitle delicious-handrawn">To Do List</p>
+    </div>
+    <div class="list-container">
 
-<div class="list-margins">
-  <div class="header">
-    <div class="cookie-title titan-one">Cookie</div>
-    <p class="cookie-subtitle delicious-handrawn">To Do List</p>
+      <fieldset class="add-task-inputs">
+        <legend class="fieldset-legend cookie-font-color">
+          ADD A NEW TASK:
+        </legend>
+        <input id="add-task-text" type="text" class="themed-input" placeholder="What to do..." />
+        <label id="select-priority-bg">
+          <span class="priority-input-label">Priority Level</span>
+          <select id="add-task-priority" class="themed-select">
+            <option id="priority-low" value="Low">Low</option>
+            <option id="priority-normal" value="Normal" selected>Normal</option>
+            <option id="priority-high" value="High">High</option>
+            <option id="priority-urgent" value="Urgent">Urgent</option>
+          </select>
+        </label>
+        <button onclick="handleAddTask()" id="add-task-button" class="themed-button" disabled>Add Task</button>
+        <button onclick="handleCancelTask()" id="cancel-task-text" class="themed-button">Cancel</button>
+      </fieldset>
+
+      <div class="section-heading">Tasks</div>
+      <ul id="todo-list-container" class="todo-list"></ul>
+      
+    </div>
   </div>
-
-
-  <div class="list-container">
-    <fieldset class="add-task-inputs">
-      <legend class="fieldset-legend cookie-font-color">ADD A NEW TASK:</legend>
-            <input id="add-task-text" type="text" class="themed-input" placeholder="What to do..." />
-            <label id="select-priority-bg">
-              <span class="priority-input-label">Priority Level</span>
-              <select id="add-task-priority" class="themed-select">
-                <option id="priority-low" value="Low">Low</option>
-                <option id="priority-normal" value="Normal" selected>Normal</option>
-                <option id="priority-high" value="High">High</option>
-                <option id="priority-urgent" value="Urgent">Urgent</option>
-              </select>
-            </label>
-            <button onclick="handleAddTask()" id="add-task-button" class="themed-button" disabled>Add Task</button>
-            <button onclick="handleCancelTask()" id="cancel-task-text" class="themed-button">Cancel</button>
-    </fieldset>
-
-    <div class="section-heading">Tasks</div>
-    <ul id="todo-list-container" class="todo-list">
-    </ul>
-  </div>
-</div>
   <script src="index.js" type="text/javascript"></script>
 </body>
 </html>
