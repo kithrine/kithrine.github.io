@@ -29,10 +29,10 @@ Cookie is a todo list app built with pure HTML, CSS, and JavaScript—no framewo
 - Your tasks are saved automatically in your browser.
 
 ## Screenshots
-Cookie on larger screens
+Cookie on larger screens  
 ![Screenshot of Cookie To Do App](images/cookie_screenshot.png)
-
-Cookie on smaller screens
+  
+Cookie on smaller screens  
 ![Screenshot of Cookie To Do App on smaller screens](images/cookie_screenshot_smaller_screen.png)
 
 
