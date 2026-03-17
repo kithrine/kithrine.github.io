@@ -34,19 +34,8 @@ Cookie is a todo list app built with pure HTML, CSS, and JavaScript—no framewo
 ## Getting Started
 Just open index.html in your browser. No build steps or dependencies required.
 
-Code Highlights
-index.html: Semantic structure, accessible forms, and custom font usage.
-index.css: Responsive flexbox layout, CSS variables, and custom control styling.
-index.js: Modular, readable code for task management and UI updates.
-
-## Future Considerations
-- Modal for confirmation of deletion of a task
-- Adding dates/timestamps
-- Completion and archiving tasks
-
-Ideas for Future Improvements
-Add due dates and reminders.
-Implement drag-and-drop task reordering.
-Add user authentication and cloud sync.
-Support for dark/light mode toggle.
-Task filtering and search.
+## Future Considerations for Improvements
+- Modal for confirmation of permanent deletion of a task.
+- Adding dates/timestamps and reminders.
+- Completion and archiving tasks.
+- Task filtering and search.
