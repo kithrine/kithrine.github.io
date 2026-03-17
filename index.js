@@ -14,7 +14,6 @@ const editIcon = `<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20"
 const deleteIcon = `<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="currentColor" viewBox="0 0 640 640"><path d="M232.7 69.9C237.1 56.8 249.3 48 263.1 48L377 48C390.8 48 403 56.8 407.4 69.9L416 96L512 96C529.7 96 544 110.3 544 128C544 145.7 529.7 160 512 160L128 160C110.3 160 96 145.7 96 128C96 110.3 110.3 96 128 96L224 96L232.7 69.9zM128 208L512 208L512 512C512 547.3 483.3 576 448 576L192 576C156.7 576 128 547.3 128 512L128 208zM216 272C202.7 272 192 282.7 192 296L192 488C192 501.3 202.7 512 216 512C229.3 512 240 501.3 240 488L240 296C240 282.7 229.3 272 216 272zM320 272C306.7 272 296 282.7 296 296L296 488C296 501.3 306.7 512 320 512C333.3 512 344 501.3 344 488L344 296C344 282.7 333.3 272 320 272zM424 272C410.7 272 400 282.7 400 296L400 488C400 501.3 410.7 512 424 512C437.3 512 448 501.3 448 488L448 296C448 282.7 437.3 272 424 272z"/></svg>`
 
 
-//! MAIN TODO LIST
 //* BUILD TODO LIST
 const buildTodoList = (task, index) => {
   // Dynamic badge colors based on priority level
@@ -70,7 +69,6 @@ const handleAddTask = () => {
   
   // Repopulate entire localStorage with all tasks
   localStorage.setItem("tasks", JSON.stringify(tasks))
-  // console.log("JSON.stringify newTask", JSON.stringify(newTask))
 
   // Clear input text and reset priority level to Normal
   addTaskText.value = ""
@@ -82,7 +80,7 @@ const handleAddTask = () => {
 
 //* EDIT TASK
 let currentlyEditing = false
-// console.log("first currentlyEditing", currentlyEditing)
+
 const handleEditTask = (id) => {
   // Get task info
   const taskText = document.getElementById(`task-text-${id}`)
@@ -90,19 +88,18 @@ const handleEditTask = (id) => {
   const priorityBadge = document.getElementById(`task-priority-badge-${id}`)
   const editPriorityDropdown = document.getElementById(`edit-priority-dropdown-${id}`)
   
+  // Get task index in tasks array
   const taskIndex = tasks.findIndex(task => task.id === id)
 
+  // Toggle edit mode (if not currently editing, open edit input. If currently editing, save changes and close edit input)
   if (currentlyEditing === false) {
     currentlyEditing = true
-    // console.log("second currentlyEditing", currentlyEditing)
     editInput.classList.remove("hidden")
     taskText.classList.add("hidden")
     editPriorityDropdown.classList.remove("hidden")
     priorityBadge.classList.add("hidden")
-
   } else {
     currentlyEditing = false
-    // console.log("third currentlyEditing", currentlyEditing)
     let updatedTaskText = editInput.value
     tasks[taskIndex].text = updatedTaskText
     let updatedPriority = editPriorityDropdown.value
@@ -110,7 +107,7 @@ const handleEditTask = (id) => {
     localStorage.setItem("tasks", JSON.stringify(tasks))
     taskText.innerHTML = updatedTaskText
     priorityBadge.innerHTML = updatedPriority
-    // update badge class to match new priority (use lowercase to match CSS)
+    // Update badge color based on updated priority level
     priorityBadge.className = `priority-badge priority-${updatedPriority.toLowerCase()}`
     editInput.classList.add("hidden")
     taskText.classList.remove("hidden")
@@ -120,7 +117,6 @@ const handleEditTask = (id) => {
   }
 }
 
-// todo: One day make the tasks ARCHIVED instead of deleting
 //* DELETE/REMOVE TASK
 const handleDeleteTask = (id) => {
   let taskItem = document.getElementById(id)
@@ -131,7 +127,7 @@ const handleDeleteTask = (id) => {
   buildTodoListHTML()
 }
 
-//* CLEAR OUT ADD TASK INPUT
+//* CLEAR OUT TEXT FROM ADD TASK INPUT
 const handleCancelTask = () => {
   addTaskText.value = ""
   addTaskButton.setAttribute("disabled", "")
@@ -140,57 +136,8 @@ const handleCancelTask = () => {
 //* DISABLE 'ADD TASK' BUTTON IF NO TEXT IN INPUT FIELD/NO PRIORITY LEVEL SELECTED
 addTaskText.addEventListener("input", () => {
   if (addTaskText.value !== "") {
-    // addTaskButton.classList.remove("btn-disabled")
     addTaskButton.removeAttribute("disabled")
   } else {
-    // addTaskButton.classList.add("btn-disabled")
     addTaskButton.setAttribute("disabled", "")
   }
 })
-
-
-const displayTodoTasks = (tasks) => {
-  todoListContainer.innerHTML = "" // clear exisiting tasks
-
-  tasks.forEach((task, index) => {
-    const badgeClass = task.priority ? `priority-${task.priority.toLowerCase()}` : 'priority-normal'
-
-    const taskItem = `
-      <li id="${task.id}" class="task-row">
-        <div id="task-id" class="task-index">${index + 1}</div>
-        <div class="task-content">
-          <div>
-            <select id="edit-priority-dropdown-${task.id}" class="edit-priority-select hidden">
-              <option disabled selected value="${task.priority}">${task.priority}</option>
-              <option value="Low">Low</option>
-              <option value="Normal">Normal</option>
-              <option value="High">High</option>
-              <option value="Urgent">Urgent</option>
-            </select>
-            <div id="task-priority-badge-${task.id}" class="priority-badge ${badgeClass}">${task.priority}</div>
-          </div>
-            <input id="editInput-${task.id}" type="text" placeholder="Edit task..." class="edit-input themed-input hidden" value="${task.text}" />
-            <div id="task-text-${task.id}" class="task-text">${task.text}</div>
-          </div>
-          <div class="task-actions">
-            <button onclick="handleEditTask('${task.id}')" class="icon-button">${editIcon}</button>
-            <button onclick="handleDeleteTask('${task.id}')" class="icon-button">${deleteIcon}</button>
-          </div>
-      </li>
-    `
-    todoListContainer.insertAdjacentHTML("beforeend", taskItem)
-  })
-}
-
-
-//! THEME TOGGLE
-const theme = JSON.parse(localStorage.getItem("theme"))
-const themeToggle = document.getElementById("theme-toggle")
-const bodyBackground = document.getElementById("body-background")
-const selectPriorityBackground = document.getElementById("select-priority-bg")
-const priorityLow = document.getElementById("priority-low")
-const priorityNormal = document.getElementById("priority-normal")
-const priorityHigh = document.getElementById("priority-high")
-const priorityUrgent = document.getElementById("priority-urgent")
-const cancelTaskText = document.getElementById("cancel-task-text")
-const cancelNoteText = document.getElementById("cancel-note-text")
